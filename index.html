@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spectrum Personality Quiz</title>
+    <title>Spectrum Personality Inventory</title>
     <style>
-        /* CSS Variables for Clean Themes */
         :root {
             --bg-color: #f8fafc;
             --text-primary: #0f172a;
@@ -14,14 +13,12 @@
             --glass-border: rgba(255, 255, 255, 0.8);
             --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.03);
             
-            /* Likert Colors */
-            --color-sd: #ef4444; /* Strongly Disagree (Red) */
-            --color-d: #f97316;  /* Disagree (Orange) */
-            --color-a: #06b6d4;  /* Agree (Teal) */
-            --color-sa: #10b981; /* Strongly Agree (Green) */
+            --color-sd: #ef4444; 
+            --color-d: #f97316;  
+            --color-a: #06b6d4;  
+            --color-sa: #10b981; 
         }
 
-        /* Reset and Layout */
         * {
             margin: 0;
             padding: 0;
@@ -33,9 +30,9 @@
             min-height: 100vh;
             background-color: var(--bg-color);
             background-image: 
-                radial-gradient(at 0% 0%, rgba(239, 68, 68, 0.07) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.07) 0px, transparent 50%),
-                radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
+                radial-gradient(at 0% 0%, rgba(239, 68, 68, 0.04) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.04) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.04) 0px, transparent 50%);
             display: flex;
             justify-content: center;
             align-items: flex-start;
@@ -43,7 +40,6 @@
             color: var(--text-primary);
         }
 
-        /* Container Structure */
         .container {
             width: 100%;
             max-width: 1100px;
@@ -54,16 +50,10 @@
         }
 
         @media (max-width: 900px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-            .sidebar {
-                position: relative !important;
-                top: 0 !important;
-            }
+            .container { grid-template-columns: 1fr; }
+            .sidebar { position: relative !important; top: 0 !important; }
         }
 
-        /* Light-mode Glass Panels */
         .glass-panel {
             background: var(--glass-bg);
             backdrop-filter: blur(16px);
@@ -74,7 +64,6 @@
             box-shadow: var(--shadow);
         }
 
-        /* Header Styling */
         .quiz-header h1 {
             font-size: 2.2rem;
             font-weight: 800;
@@ -88,15 +77,19 @@
         .quiz-header p {
             color: var(--text-secondary);
             font-size: 1.05rem;
-            margin-bottom: 35px;
+            margin-bottom: 25px;
             line-height: 1.5;
         }
 
-        /* Questions List */
-        .questions-list {
-            display: flex;
+        /* Pagination Setup Containers */
+        .page-view {
+            display: none;
             flex-direction: column;
-            gap: 24px;
+            gap: 20px;
+        }
+
+        .page-view.active {
+            display: flex;
         }
 
         .question-card {
@@ -104,20 +97,19 @@
             border: 1px solid rgba(241, 245, 249, 0.8);
             border-radius: 20px;
             padding: 24px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: border-color 0.3s ease;
         }
 
-        .question-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px -10px rgba(0,0,0,0.04);
+        .question-card.answered {
+            border-color: rgba(16, 185, 129, 0.2);
+            background: rgba(16, 185, 129, 0.01);
         }
 
         .question-text {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 600;
             line-height: 1.5;
-            margin-bottom: 20px;
-            color: var(--text-primary);
+            margin-bottom: 18px;
         }
 
         .question-num {
@@ -126,13 +118,12 @@
             margin-right: 6px;
         }
 
-        /* Radial Options Container */
+        /* Radial Inputs Layout */
         .radial-options {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 12px;
-            max-width: 550px;
-            margin: 0 auto;
+            max-width: 500px;
         }
 
         .option-wrapper {
@@ -143,129 +134,130 @@
             cursor: pointer;
         }
 
-        /* Styled Circle Buttons */
         .circle-btn {
-            width: 44px;
-            height: 44px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             border: 2px solid #cbd5e1;
             background: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
+            transition: all 0.2s ease;
         }
 
         .circle-btn::after {
             content: '';
-            width: 14px;
-            height: 14px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             background: transparent;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             transform: scale(0);
+            transition: transform 0.2s ease;
         }
 
-        /* Option Label Text */
         .option-label {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
             color: var(--text-secondary);
             text-align: center;
-            transition: color 0.2s ease;
             user-select: none;
         }
 
-        /* Color States & Interactive Behaviours */
+        /* Color Mapping States */
+        .option-wrapper[data-val="1"]:hover .circle-btn { border-color: var(--color-sd); }
+        .option-wrapper[data-val="1"].selected .circle-btn { border-color: var(--color-sd); background: rgba(239, 68, 68, 0.05); }
+        .option-wrapper[data-val="1"].selected .circle-btn::after { background: var(--color-sd); transform: scale(1); }
         
-        /* 1. Strongly Disagree (Red) */
-        .option-wrapper[data-val="1"]:hover .circle-btn {
-            border-color: var(--color-sd);
-            box-shadow: 0 0 12px rgba(239, 110, 110, 0.2);
-        }
-        .option-wrapper[data-val="1"].selected .circle-btn {
-            border-color: var(--color-sd);
-            background: rgba(239, 68, 68, 0.05);
-        }
-        .option-wrapper[data-val="1"].selected .circle-btn::after {
-            background: var(--color-sd);
-            transform: scale(1);
-        }
-        .option-wrapper[data-val="1"].selected .option-label {
-            color: var(--color-sd);
+        .option-wrapper[data-val="2"]:hover .circle-btn { border-color: var(--color-d); }
+        .option-wrapper[data-val="2"].selected .circle-btn { border-color: var(--color-d); background: rgba(249, 115, 22, 0.05); }
+        .option-wrapper[data-val="2"].selected .circle-btn::after { background: var(--color-d); transform: scale(1); }
+
+        .option-wrapper[data-val="3"]:hover .circle-btn { border-color: var(--color-a); }
+        .option-wrapper[data-val="3"].selected .circle-btn { border-color: var(--color-a); background: rgba(6, 182, 212, 0.05); }
+        .option-wrapper[data-val="3"].selected .circle-btn::after { background: var(--color-a); transform: scale(1); }
+
+        .option-wrapper[data-val="4"]:hover .circle-btn { border-color: var(--color-sa); }
+        .option-wrapper[data-val="4"].selected .circle-btn { border-color: var(--color-sa); background: rgba(16, 185, 129, 0.05); }
+        .option-wrapper[data-val="4"].selected .circle-btn::after { background: var(--color-sa); transform: scale(1); }
+
+        /* Page Management Action Footer */
+        .pagination-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(226, 232, 240, 0.8);
         }
 
-        /* 2. Disagree (Orange) */
-        .option-wrapper[data-val="2"]:hover .circle-btn {
-            border-color: var(--color-d);
-            box-shadow: 0 0 12px rgba(249, 115, 22, 0.2);
-        }
-        .option-wrapper[data-val="2"].selected .circle-btn {
-            border-color: var(--color-d);
-            background: rgba(249, 115, 22, 0.05);
-        }
-        .option-wrapper[data-val="2"].selected .circle-btn::after {
-            background: var(--color-d);
-            transform: scale(1);
-        }
-        .option-wrapper[data-val="2"].selected .option-label {
-            color: var(--color-d);
+        .nav-btn {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
         }
 
-        /* 3. Agree (Teal) */
-        .option-wrapper[data-val="3"]:hover .circle-btn {
-            border-color: var(--color-a);
-            box-shadow: 0 0 12px rgba(6, 182, 212, 0.2);
-        }
-        .option-wrapper[data-val="3"].selected .circle-btn {
-            border-color: var(--color-a);
-            background: rgba(6, 182, 212, 0.05);
-        }
-        .option-wrapper[data-val="3"].selected .circle-btn::after {
-            background: var(--color-a);
-            transform: scale(1);
-        }
-        .option-wrapper[data-val="3"].selected .option-label {
-            color: var(--color-a);
+        .nav-btn:hover:not(:disabled) {
+            background: #f8fafc;
+            border-color: #94a3b8;
         }
 
-        /* 4. Strongly Agree (Green) */
-        .option-wrapper[data-val="4"]:hover .circle-btn {
-            border-color: var(--color-sa);
-            box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
-        }
-        .option-wrapper[data-val="4"].selected .circle-btn {
-            border-color: var(--color-sa);
-            background: rgba(16, 185, 129, 0.05);
-        }
-        .option-wrapper[data-val="4"].selected .circle-btn::after {
-            background: var(--color-sa);
-            transform: scale(1);
-        }
-        .option-wrapper[data-val="4"].selected .option-label {
-            color: var(--color-sa);
+        .nav-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
         }
 
-        /* Sticky Sidebar Results */
+        .page-indicator {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        /* Sticky Sidebar & Gatekeeping Logic */
         .sidebar {
             position: sticky;
             top: 40px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-height: 400px;
         }
 
         .results-title {
             font-size: 1.3rem;
             font-weight: 700;
             margin-bottom: 25px;
-            color: var(--text-primary);
             border-bottom: 1px solid rgba(226, 232, 240, 0.8);
             padding-bottom: 12px;
         }
 
-        .trait-container {
-            margin-bottom: 20px;
+        /* Blurring Mechanics Containers */
+        .results-container {
+            position: relative;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
+        .blur-wrapper {
+            position: relative;
+            transition: filter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-grow: 1;
+        }
+
+        .blur-wrapper.locked {
+            filter: blur(8px);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .trait-container { margin-bottom: 24px; }
         .trait-labels {
             display: flex;
             justify-content: space-between;
@@ -274,212 +266,329 @@
             font-weight: 600;
             color: var(--text-secondary);
         }
+        .bar-bg { width: 100%; height: 10px; background: #e2e8f0; border-radius: 5px; overflow: hidden; }
+        .bar-fill { height: 100%; width: 50%; border-radius: 5px; transition: width 0.5s ease; }
 
-        .bar-bg {
-            width: 100%;
-            height: 10px;
-            background: #e2e8f0;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-
-        .bar-fill {
-            height: 100%;
-            width: 50%; /* Starts at neutral 50% midpoint */
-            border-radius: 5px;
-            transition: width 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.2);
-        }
-
-        /* Custom dynamic gradient bars to pop off the white surface */
         #e-i-fill { background: linear-gradient(90deg, #f43f5e, #fb7185); }
         #s-n-fill { background: linear-gradient(90deg, #0ea5e9, #38bdf8); }
         #t-f-fill { background: linear-gradient(90deg, #ec4899, #f472b6); }
         #j-p-fill { background: linear-gradient(90deg, #10b981, #34d399); }
 
-        /* Completion & Counter Badge */
-        .status-badge {
-            margin-top: 25px;
+        /* Gate overlay blocking blurred contents */
+        .blur-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             text-align: center;
-            font-size: 0.9rem;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            transition: opacity 0.4s ease;
+        }
+
+        .gate-msg {
+            font-size: 0.95rem;
             font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .unlock-btn {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
+            transform: scale(0);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .unlock-btn.reveal {
+            transform: scale(1);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .unlock-btn:hover {
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+            transform: scale(1.05);
+        }
+
+        .status-badge {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 700;
             color: var(--text-secondary);
             background: rgba(241, 245, 249, 0.6);
             padding: 12px;
             border-radius: 12px;
             border: 1px solid rgba(226, 232, 240, 0.5);
-            transition: all 0.3s ease;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- Left Side: List of Questions -->
+        <!-- Pagination Form -->
         <div class="glass-panel">
             <div class="quiz-header">
-                <h1>Spectrum Analysis</h1>
-                <p>Please review each statement below and indicate your preference using the options provided. Your metrics will balance and shift live.</p>
+                <h1>Spectrum Inventory</h1>
+                <p>Answer at least 36 questions to unlock your metrics summaries. You may finish the full assessment or stop at any point once unlocked.</p>
             </div>
 
-            <div class="questions-list" id="quiz-container">
-                <!-- Injected via JavaScript -->
+            <div id="quiz-pages-container">
+                <!-- Programmatically generated pages populated below -->
+            </div>
+
+            <div class="pagination-controls">
+                <button class="nav-btn" id="prev-btn" onclick="changePage(-1)">Previous</button>
+                <span class="page-indicator" id="page-indicator">Page 1 of 16</span>
+                <button class="nav-btn" id="next-btn" onclick="changePage(1)">Next Page</button>
             </div>
         </div>
 
-        <!-- Right Side: Sticky Live Metrics Sidebar -->
+        <!-- Metric Dashboard Panel containing Blur Gatekeeping layers -->
         <div class="glass-panel sidebar">
-            <h2 class="results-title">Live Personality Dynamics</h2>
+            <h2 class="results-title">Your Profile Dynamics</h2>
             
-            <div class="trait-container">
-                <div class="trait-labels"><span>Introversion</span><span>Extroversion</span></div>
-                <div class="bar-bg"><div id="e-i-fill" class="bar-fill"></div></div>
-            </div>
+            <div class="results-container">
+                <!-- Overlay shielding metrics -->
+                <div class="blur-overlay" id="blur-gate">
+                    <p class="gate-msg" id="gate-msg">Complete 36 statements<br>to view live calculations.</p>
+                    <button class="unlock-btn" id="unlock-action-btn" onclick="revealMetrics()">Reveal Data</button>
+                </div>
 
-            <div class="trait-container">
-                <div class="trait-labels"><span>Sensing</span><span>Intuition</span></div>
-                <div class="bar-bg"><div id="s-n-fill" class="bar-fill"></div></div>
-            </div>
-
-            <div class="trait-container">
-                <div class="trait-labels"><span>Thinking</span><span>Feeling</span></div>
-                <div class="bar-bg"><div id="t-f-fill" class="bar-fill"></div></div>
-            </div>
-
-            <div class="trait-container">
-                <div class="trait-labels"><span>Judging</span><span>Perceiving</span></div>
-                <div class="bar-bg"><div id="j-p-fill" class="bar-fill"></div></div>
+                <!-- Hidden Target metrics container -->
+                <div class="blur-wrapper locked" id="metrics-wrapper">
+                    <div class="trait-container">
+                        <div class="trait-labels"><span>Introversion</span><span>Extroversion</span></div>
+                        <div class="bar-bg"><div id="e-i-fill" class="bar-fill"></div></div>
+                    </div>
+                    <div class="trait-container">
+                        <div class="trait-labels"><span>Sensing</span><span>Intuition</span></div>
+                        <div class="bar-bg"><div id="s-n-fill" class="bar-fill"></div></div>
+                    </div>
+                    <div class="trait-container">
+                        <div class="trait-labels"><span>Thinking</span><span>Feeling</span></div>
+                        <div class="bar-bg"><div id="t-f-fill" class="bar-fill"></div></div>
+                    </div>
+                    <div class="trait-container">
+                        <div class="trait-labels"><span>Judging</span><span>Perceiving</span></div>
+                        <div class="bar-bg"><div id="j-p-fill" class="bar-fill"></div></div>
+                    </div>
+                </div>
             </div>
 
             <div class="status-badge" id="status-badge">
-                0 of 10 statements answered.
+                0 of 144 answered.
             </div>
         </div>
     </div>
 
     <script>
-        const questions = [
-            { id: 0, text: "You feel completely energized after a crowded social mixer.", trait: "EI" },
-            { id: 1, text: "You look at physical facts rather than searching for hidden meanings.", trait: "SN", reverse: true },
-            { id: 2, text: "Objective logic should take precedence over mercy and sentimentality.", trait: "TF", reverse: true },
-            { id: 3, text: "You feel most creative when following a highly structured daily routine.", trait: "JP", reverse: true },
-            { id: 4, text: "You find yourself readily striking up conversations with stranger open-heartedly.", trait: "EI" },
-            { id: 5, text: "You operate beautifully in chaotic environments relying on spontaneous inspiration.", trait: "JP" },
-            { id: 6, text: "You absorb the ambient mood and emotions of whatever room you enter.", trait: "TF" },
-            { id: 7, text: "You naturally lean toward symbols, metaphors, and conceptual philosophies.", trait: "SN" },
-            { id: 8, text: "You actively seek solo time to recharge after dealing with heavy tasks.", trait: "EI", reverse: true },
-            { id: 9, text: "An unstructured schedule makes you feel completely lost and stressed.", trait: "JP", reverse: true }
+        const TOTAL_QUESTIONS = 144;
+        const QUESTIONS_PER_PAGE = 9;
+        const UNLOCK_THRESHOLD = 36;
+        
+        let currentPage = 0;
+        let answers = {}; // Maps question ID -> option index chosen
+        let isRevealed = false; // Tracks if user clicked "Reveal Data"
+
+        // Generate 144 mock inventory items cycling trait tracking
+        const traitPool = ["EI", "SN", "TF", "JP"];
+        const statementTemplates = [
+            "You prefer structure and routine over spontaneous environments.",
+            "Being around large groups of active people recharges your energy reserves.",
+            "You often focus on theoretical possibilities instead of present realities.",
+            "You prioritize absolute objectivity over feelings when resolving complex conflicts.",
+            "You feel highly motivated when working towards a clear, structured plan.",
+            "Dynamic brainstorming sessions spark your creativity more than structured analysis.",
+            "You heavily rely on empathy and emotional resonance to make daily life choices.",
+            "You value hard facts and sensory details over conceptual abstractions."
         ];
 
-        // Track user answers (questionIndex -> numeric choice 1 to 4)
-        let answers = {};
+        function generateQuestionsArray() {
+            let arr = [];
+            for(let i = 0; i < TOTAL_QUESTIONS; i++) {
+                const trait = traitPool[i % traitPool.length];
+                const text = statementTemplates[i % statementTemplates.length];
+                // Introduce some variance in reverse mapping for balanced distributions
+                const reverse = i % 3 === 0;
+                
+                arr.push({
+                    id: i,
+                    text: text,
+                    trait: trait,
+                    reverse: reverse
+                });
+            }
+            return arr;
+        }
 
-        function renderQuiz() {
-            const container = document.getElementById('quiz-container');
+        const questions = generateQuestionsArray();
+
+        function buildPaginatedQuiz() {
+            const container = document.getElementById('quiz-pages-container');
             container.innerHTML = '';
 
-            questions.forEach((q, index) => {
-                const card = document.createElement('div');
-                card.className = 'question-card';
-                card.innerHTML = `
-                    <div class="question-text">
-                        <span class="question-num">${String(index + 1).padStart(2, '0')}.</span>
-                        <span>${q.text}</span>
-                    </div>
-                    <div class="radial-options">
-                        <div class="option-wrapper" data-q="${index}" data-val="1">
-                            <div class="circle-btn"></div>
-                            <span class="option-label">Strongly<br>Disagree</span>
-                        </div>
-                        <div class="option-wrapper" data-q="${index}" data-val="2">
-                            <div class="circle-btn"></div>
-                            <span class="option-label">Disagree</span>
-                        </div>
-                        <div class="option-wrapper" data-q="${index}" data-val="3">
-                            <div class="circle-btn"></div>
-                            <span class="option-label">Agree</span>
-                        </div>
-                        <div class="option-wrapper" data-q="${index}" data-val="4">
-                            <div class="circle-btn"></div>
-                            <span class="option-label">Strongly<br>Agree</span>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
+            const totalPages = Math.ceil(TOTAL_QUESTIONS / QUESTIONS_PER_PAGE);
 
-            // Handle clicking the custom radial options
+            for (let pageIdx = 0; pageIdx < totalPages; pageIdx++) {
+                const pageDiv = document.createElement('div');
+                pageDiv.className = `page-view ${pageIdx === 0 ? 'active' : ''}`;
+                pageDiv.setAttribute('id', `page-${pageIdx}`);
+
+                const startIdx = pageIdx * QUESTIONS_PER_PAGE;
+                const endIdx = startIdx + QUESTIONS_PER_PAGE;
+                const pageQuestions = questions.slice(startIdx, endIdx);
+
+                pageQuestions.forEach(q => {
+                    const card = document.createElement('div');
+                    card.className = 'question-card';
+                    card.setAttribute('id', `card-${q.id}`);
+                    card.innerHTML = `
+                        <div class="question-text">
+                            <span class="question-num">${String(q.id + 1).padStart(3, '0')}.</span>
+                            <span>${q.text}</span>
+                        </div>
+                        <div class="radial-options">
+                            <div class="option-wrapper" data-q="${q.id}" data-val="1">
+                                <div class="circle-btn"></div><span class="option-label">Strongly<br>Disagree</span>
+                            </div>
+                            <div class="option-wrapper" data-q="${q.id}" data-val="2">
+                                <div class="circle-btn"></div><span class="option-label">Disagree</span>
+                            </div>
+                            <div class="option-wrapper" data-q="${q.id}" data-val="3">
+                                <div class="circle-btn"></div><span class="option-label">Agree</span>
+                            </div>
+                            <div class="option-wrapper" data-q="${q.id}" data-val="4">
+                                <div class="circle-btn"></div><span class="option-label">Strongly<br>Agree</span>
+                            </div>
+                        </div>
+                    `;
+                    pageDiv.appendChild(card);
+                });
+
+                container.appendChild(pageDiv);
+            }
+
+            attachOptionListeners();
+            updateNavigationUI();
+        }
+
+        function attachOptionListeners() {
             document.querySelectorAll('.option-wrapper').forEach(wrapper => {
                 wrapper.addEventListener('click', function() {
                     const qIdx = parseInt(this.getAttribute('data-q'));
                     const val = parseInt(this.getAttribute('data-val'));
                     
-                    // Clear previous selection in this specific question block
                     const siblings = this.parentElement.querySelectorAll('.option-wrapper');
                     siblings.forEach(node => node.classList.remove('selected'));
                     
-                    // Style current choice
                     this.classList.add('selected');
-                    
-                    // Save and trigger calculations
                     answers[qIdx] = val;
-                    updateMetrics();
+
+                    // Add visually pleasing answered indicator class to question card
+                    const card = document.getElementById(`card-${qIdx}`);
+                    if (card) {
+                        card.classList.add('answered');
+                    }
+                    
+                    evaluateSystemStates();
                 });
             });
         }
 
-        function updateMetrics() {
-            let traits = { 
-                EI: { score: 0, count: 0 }, 
-                SN: { score: 0, count: 0 }, 
-                TF: { score: 0, count: 0 }, 
-                JP: { score: 0, count: 0 } 
-            };
+        function changePage(direction) {
+            const totalPages = Math.ceil(TOTAL_QUESTIONS / QUESTIONS_PER_PAGE);
+            document.getElementById(`page-${currentPage}`).classList.remove('active');
+            
+            currentPage += direction;
+            if (currentPage < 0) currentPage = 0;
+            if (currentPage >= totalPages) currentPage = totalPages - 1;
 
-            // Calculate current scores
-            Object.keys(answers).forEach(qIdxStr => {
-                const qIdx = parseInt(qIdxStr);
-                const val = answers[qIdx];
-                const q = questions[qIdx];
-                
-                // Shift 1-4 option value down to a relative balance window (-1.5 to +1.5)
-                let balanceValue = val - 2.5;
-                if (q.reverse) {
-                    balanceValue = -balanceValue;
+            document.getElementById(`page-${currentPage}`).classList.add('active');
+            updateNavigationUI();
+            
+            // Scroll back to the top of the container context
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateNavigationUI() {
+            const totalPages = Math.ceil(TOTAL_QUESTIONS / QUESTIONS_PER_PAGE);
+            document.getElementById('prev-btn').disabled = (currentPage === 0);
+            document.getElementById('next-btn').disabled = (currentPage === totalPages - 1);
+            document.getElementById('page-indicator').innerText = `Page ${currentPage + 1} of ${totalPages}`;
+        }
+
+        function evaluateSystemStates() {
+            const answeredCount = Object.keys(answers).length;
+            
+            // 1. Update text progress indicators
+            document.getElementById('status-badge').innerHTML = `<strong>${answeredCount} of ${TOTAL_QUESTIONS}</strong> answered`;
+
+            // 2. Logic Check: Has threshold requirement been achieved?
+            if (answeredCount >= UNLOCK_THRESHOLD) {
+                if (!isRevealed) {
+                    document.getElementById('gate-msg').innerHTML = "✨ Minimum metric count met!<br>You can now unblur results.";
+                    document.getElementById('unlock-action-btn').classList.add('reveal');
                 }
+            } else {
+                const remaining = UNLOCK_THRESHOLD - answeredCount;
+                document.getElementById('gate-msg').innerHTML = `Complete <strong>${remaining} more</strong> statements<br>to view live calculations.`;
+                document.getElementById('unlock-action-btn').classList.remove('reveal');
+            }
 
-                traits[q.trait].score += balanceValue;
+            // 3. Keep updating background metrics model naturally
+            calculateDynamicMetrics();
+        }
+
+        function revealMetrics() {
+            isRevealed = true;
+            // Unblur dashboard elements smoothly 
+            document.getElementById('metrics-wrapper').classList.remove('locked');
+            // Hide gate blocker layers permanently
+            document.getElementById('blur-gate').style.display = "none";
+        }
+
+        function calculateDynamicMetrics() {
+            let traits = { EI: { score: 0, count: 0 }, SN: { score: 0, count: 0 }, TF: { score: 0, count: 0 }, JP: { score: 0, count: 0 } };
+
+            Object.keys(answers).forEach(key => {
+                const id = parseInt(key);
+                const val = answers[id];
+                const q = questions[id];
+
+                let balance = val - 2.5; 
+                if (q.reverse) balance = -balance;
+
+                traits[q.trait].score += balance;
                 traits[q.trait].count++;
             });
 
-            // Update DOM progress widths smoothly
-            adjustBarWidth("e-i-fill", traits.EI);
-            adjustBarWidth("s-n-fill", traits.SN);
-            adjustBarWidth("t-f-fill", traits.TF);
-            adjustBarWidth("j-p-fill", traits.JP);
-
-            // Update user status copy
-            const answeredCount = Object.keys(answers).length;
-            const badge = document.getElementById('status-badge');
-            if (answeredCount === questions.length) {
-                badge.innerHTML = "✨ <strong>Evaluation Complete!</strong> Dynamics locked.";
-                badge.style.background = "rgba(16, 185, 129, 0.1)";
-                badge.style.color = "var(--color-sa)";
-                badge.style.borderColor = "rgba(16, 185, 129, 0.3)";
-            } else {
-                badge.innerHTML = `<strong>${answeredCount} of ${questions.length}</strong> statements answered.`;
-                badge.style.background = "rgba(241, 245, 249, 0.6)";
-                badge.style.color = "var(--text-secondary)";
-                badge.style.borderColor = "rgba(226, 232, 240, 0.5)";
-            }
+            adjustBar("e-i-fill", traits.EI);
+            adjustBar("s-n-fill", traits.SN);
+            adjustBar("t-f-fill", traits.TF);
+            adjustBar("j-p-fill", traits.JP);
         }
 
-        function adjustBarWidth(elementId, traitData) {
-            const bar = document.getElementById(elementId);
+        function adjustBar(id, traitData) {
+            const bar = document.getElementById(id);
             if (traitData.count === 0) {
-                bar.style.width = "50%"; // Centered fallback
+                bar.style.width = "50%";
                 return;
             }
-
             const average = traitData.score / traitData.count;
             // Map the balance accurately over visual scale widths (min 10% to max 90%)
             let targetPercentage = 50 + (average / 1.5) * 40;
@@ -487,7 +596,8 @@
         }
 
         // Initialize App
-        renderQuiz();
+        buildPaginatedQuiz();
+        evaluateSystemStates();
     </script>
 </body>
 </html>
