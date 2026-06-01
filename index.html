@@ -81,6 +81,41 @@
             line-height: 1.5;
         }
 
+        /* Sync Status Pill */
+        .sync-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: rgba(226, 232, 240, 0.4);
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            border: 1px solid rgba(226, 232, 240, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        .sync-status.saving {
+            background: rgba(249, 115, 22, 0.1);
+            color: var(--color-d);
+            border-color: rgba(249, 115, 22, 0.2);
+        }
+
+        .sync-status.saved {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--color-sa);
+            border-color: rgba(16, 185, 129, 0.2);
+        }
+
+        .sync-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
         /* Pagination Setup Containers */
         .page-view {
             display: none;
@@ -97,7 +132,7 @@
             border: 1px solid rgba(241, 245, 249, 0.8);
             border-radius: 20px;
             padding: 24px;
-            transition: border-color 0.3s ease;
+            transition: border-color 0.3s ease, background 0.3s ease;
         }
 
         .question-card.answered {
@@ -343,6 +378,10 @@
         <!-- Pagination Form -->
         <div class="glass-panel">
             <div class="quiz-header">
+                <div class="sync-status" id="sync-indicator">
+                    <span class="sync-dot"></span>
+                    <span id="sync-text">Connecting to database...</span>
+                </div>
                 <h1>Spectrum Inventory</h1>
                 <p>Answer at least 36 questions to unlock your metrics summaries. You may finish the full assessment or stop at any point once unlocked.</p>
             </div>
@@ -396,14 +435,24 @@
         </div>
     </div>
 
-    <script>
+    <!-- Firebase Integration modules -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
         const TOTAL_QUESTIONS = 144;
         const QUESTIONS_PER_PAGE = 9;
         const UNLOCK_THRESHOLD = 36;
         
         let currentPage = 0;
-        let answers = {}; // Maps question ID -> option index chosen
-        let isRevealed = false; // Tracks if user clicked "Reveal Data"
+        let answers = {}; 
+        let isRevealed = false; 
+
+        // Firebase State
+        let db, auth, currentUser = null;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfigStr = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
 
         // Generate 144 mock inventory items cycling trait tracking
         const traitPool = ["EI", "SN", "TF", "JP"];
@@ -423,7 +472,6 @@
             for(let i = 0; i < TOTAL_QUESTIONS; i++) {
                 const trait = traitPool[i % traitPool.length];
                 const text = statementTemplates[i % statementTemplates.length];
-                // Introduce some variance in reverse mapping for balanced distributions
                 const reverse = i % 3 === 0;
                 
                 arr.push({
@@ -438,6 +486,109 @@
 
         const questions = generateQuestionsArray();
 
+        // Synchronize state indicators
+        function updateSyncState(state) {
+            const indicator = document.getElementById('sync-indicator');
+            const text = document.getElementById('sync-text');
+            indicator.className = 'sync-status';
+            
+            if (state === 'saving') {
+                indicator.classList.add('saving');
+                text.innerText = 'Syncing...';
+            } else if (state === 'saved') {
+                indicator.classList.add('saved');
+                text.innerText = 'All progress saved';
+            } else if (state === 'offline') {
+                text.innerText = 'Local session active';
+            }
+        }
+
+        async function initFirebase() {
+            if (!firebaseConfigStr) {
+                updateSyncState('offline');
+                buildPaginatedQuiz();
+                evaluateSystemStates();
+                return;
+            }
+
+            try {
+                const firebaseConfig = JSON.parse(firebaseConfigStr);
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                // RULE 3 - Authenticate BEFORE queries
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        currentUser = user;
+                        await loadCloudProgress();
+                    } else {
+                        currentUser = null;
+                        buildPaginatedQuiz();
+                        evaluateSystemStates();
+                    }
+                });
+
+            } catch (err) {
+                console.error("Firebase init failed, running locally:", err);
+                updateSyncState('offline');
+                buildPaginatedQuiz();
+                evaluateSystemStates();
+            }
+        }
+
+        // RULE 1 - Strict user-private path used for answers
+        async function saveCloudProgress() {
+            if (!db || !currentUser) return;
+            updateSyncState('saving');
+            try {
+                const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'quizProgress', 'state');
+                await setDoc(docRef, {
+                    answers: answers,
+                    currentPage: currentPage,
+                    isRevealed: isRevealed,
+                    updatedAt: new Date().toISOString()
+                });
+                updateSyncState('saved');
+            } catch (err) {
+                console.error("Progress upload failed:", err);
+            }
+        }
+
+        async function loadCloudProgress() {
+            if (!db || !currentUser) return;
+            try {
+                const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'quizProgress', 'state');
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    answers = data.answers || {};
+                    currentPage = data.currentPage || 0;
+                    isRevealed = data.isRevealed || false;
+                }
+                
+                buildPaginatedQuiz();
+                evaluateSystemStates();
+                
+                if (isRevealed) {
+                    revealMetrics();
+                }
+                
+                showPage(currentPage);
+                updateSyncState('saved');
+            } catch (err) {
+                console.error("Progress download failed:", err);
+                buildPaginatedQuiz();
+                evaluateSystemStates();
+            }
+        }
+
         function buildPaginatedQuiz() {
             const container = document.getElementById('quiz-pages-container');
             container.innerHTML = '';
@@ -446,7 +597,7 @@
 
             for (let pageIdx = 0; pageIdx < totalPages; pageIdx++) {
                 const pageDiv = document.createElement('div');
-                pageDiv.className = `page-view ${pageIdx === 0 ? 'active' : ''}`;
+                pageDiv.className = `page-view ${pageIdx === currentPage ? 'active' : ''}`;
                 pageDiv.setAttribute('id', `page-${pageIdx}`);
 
                 const startIdx = pageIdx * QUESTIONS_PER_PAGE;
@@ -455,24 +606,26 @@
 
                 pageQuestions.forEach(q => {
                     const card = document.createElement('div');
-                    card.className = 'question-card';
+                    const isAnswered = answers[q.id] !== undefined;
+                    card.className = `question-card ${isAnswered ? 'answered' : ''}`;
                     card.setAttribute('id', `card-${q.id}`);
+                    
                     card.innerHTML = `
                         <div class="question-text">
                             <span class="question-num">${String(q.id + 1).padStart(3, '0')}.</span>
                             <span>${q.text}</span>
                         </div>
                         <div class="radial-options">
-                            <div class="option-wrapper" data-q="${q.id}" data-val="1">
+                            <div class="option-wrapper ${answers[q.id] === 1 ? 'selected' : ''}" data-q="${q.id}" data-val="1">
                                 <div class="circle-btn"></div><span class="option-label">Strongly<br>Disagree</span>
                             </div>
-                            <div class="option-wrapper" data-q="${q.id}" data-val="2">
+                            <div class="option-wrapper ${answers[q.id] === 2 ? 'selected' : ''}" data-q="${q.id}" data-val="2">
                                 <div class="circle-btn"></div><span class="option-label">Disagree</span>
                             </div>
-                            <div class="option-wrapper" data-q="${q.id}" data-val="3">
+                            <div class="option-wrapper ${answers[q.id] === 3 ? 'selected' : ''}" data-q="${q.id}" data-val="3">
                                 <div class="circle-btn"></div><span class="option-label">Agree</span>
                             </div>
-                            <div class="option-wrapper" data-q="${q.id}" data-val="4">
+                            <div class="option-wrapper ${answers[q.id] === 4 ? 'selected' : ''}" data-q="${q.id}" data-val="4">
                                 <div class="circle-btn"></div><span class="option-label">Strongly<br>Agree</span>
                             </div>
                         </div>
@@ -489,7 +642,7 @@
 
         function attachOptionListeners() {
             document.querySelectorAll('.option-wrapper').forEach(wrapper => {
-                wrapper.addEventListener('click', function() {
+                wrapper.addEventListener('click', async function() {
                     const qIdx = parseInt(this.getAttribute('data-q'));
                     const val = parseInt(this.getAttribute('data-val'));
                     
@@ -499,18 +652,18 @@
                     this.classList.add('selected');
                     answers[qIdx] = val;
 
-                    // Add visually pleasing answered indicator class to question card
                     const card = document.getElementById(`card-${qIdx}`);
                     if (card) {
                         card.classList.add('answered');
                     }
                     
                     evaluateSystemStates();
+                    await saveCloudProgress();
                 });
             });
         }
 
-        function changePage(direction) {
+        window.changePage = async function(direction) {
             const totalPages = Math.ceil(TOTAL_QUESTIONS / QUESTIONS_PER_PAGE);
             document.getElementById(`page-${currentPage}`).classList.remove('active');
             
@@ -518,11 +671,20 @@
             if (currentPage < 0) currentPage = 0;
             if (currentPage >= totalPages) currentPage = totalPages - 1;
 
-            document.getElementById(`page-${currentPage}`).classList.add('active');
-            updateNavigationUI();
+            showPage(currentPage);
+            await saveCloudProgress();
             
-            // Scroll back to the top of the container context
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        function showPage(pageIdx) {
+            currentPage = pageIdx;
+            document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+            const targetPage = document.getElementById(`page-${pageIdx}`);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+            updateNavigationUI();
         }
 
         function updateNavigationUI() {
@@ -534,11 +696,8 @@
 
         function evaluateSystemStates() {
             const answeredCount = Object.keys(answers).length;
-            
-            // 1. Update text progress indicators
             document.getElementById('status-badge').innerHTML = `<strong>${answeredCount} of ${TOTAL_QUESTIONS}</strong> answered`;
 
-            // 2. Logic Check: Has threshold requirement been achieved?
             if (answeredCount >= UNLOCK_THRESHOLD) {
                 if (!isRevealed) {
                     document.getElementById('gate-msg').innerHTML = "✨ Minimum metric count met!<br>You can now unblur results.";
@@ -550,17 +709,15 @@
                 document.getElementById('unlock-action-btn').classList.remove('reveal');
             }
 
-            // 3. Keep updating background metrics model naturally
             calculateDynamicMetrics();
         }
 
-        function revealMetrics() {
+        window.revealMetrics = async function() {
             isRevealed = true;
-            // Unblur dashboard elements smoothly 
             document.getElementById('metrics-wrapper').classList.remove('locked');
-            // Hide gate blocker layers permanently
             document.getElementById('blur-gate').style.display = "none";
-        }
+            await saveCloudProgress();
+        };
 
         function calculateDynamicMetrics() {
             let traits = { EI: { score: 0, count: 0 }, SN: { score: 0, count: 0 }, TF: { score: 0, count: 0 }, JP: { score: 0, count: 0 } };
@@ -590,14 +747,12 @@
                 return;
             }
             const average = traitData.score / traitData.count;
-            // Map the balance accurately over visual scale widths (min 10% to max 90%)
             let targetPercentage = 50 + (average / 1.5) * 40;
             bar.style.width = `${targetPercentage}%`;
         }
 
-        // Initialize App
-        buildPaginatedQuiz();
-        evaluateSystemStates();
+        // Initialize App Setup
+        initFirebase();
     </script>
 </body>
 </html>
