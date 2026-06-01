@@ -451,8 +451,18 @@
 
         // Firebase State
         let db, auth, currentUser = null;
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfigStr = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
+        const appId = "my-quiz-app"; // You can make this any string name you want
+        
+        // Paste your actual Firebase config object here as a string
+        const firebaseConfigStr = {
+          apiKey: "AIzaSyDkAa8anLi8VP-B76BVjHPtPL79sEqxzQs",
+          authDomain: "chromatypology.firebaseapp.com",
+          projectId: "chromatypology",
+          storageBucket: "chromatypology.firebasestorage.app",
+          messagingSenderId: "174151771398",
+          appId: "1:174151771398:web:be841ca9ed8ecd14d12a87",
+          measurementId: "G-TFWZ2X7J6B"
+        };
 
         // Generate 144 mock inventory items cycling trait tracking
         const traitPool = ["EI", "SN", "TF", "JP"];
