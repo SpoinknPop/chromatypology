@@ -522,7 +522,8 @@
             }
 
             try {
-                const firebaseConfig = JSON.parse(firebaseConfigStr);
+                // Directly pass your object instead of trying to parse it
+                const firebaseConfig = firebaseConfigStr; 
                 const app = initializeApp(firebaseConfig);
                 auth = getAuth(app);
                 db = getFirestore(app);
