@@ -3,39 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rainbow Glassmorphism Personality Quiz</title>
+    <title>Spectrum Personality Quiz</title>
     <style>
-        /* Reset and Animated Rainbow Background */
+        /* CSS Variables for Clean Themes */
+        :root {
+            --bg-color: #f8fafc;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.03);
+            
+            /* Likert Colors */
+            --color-sd: #ef4444; /* Strongly Disagree (Red) */
+            --color-d: #f97316;  /* Disagree (Orange) */
+            --color-a: #06b6d4;  /* Agree (Teal) */
+            --color-sa: #10b981; /* Strongly Agree (Green) */
+        }
+
+        /* Reset and Layout */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
 
         body {
             min-height: 100vh;
-            background: linear-gradient(45deg, #ff0055, #00ff66, #00ffff, #ff00ff, #ffcc00);
-            background-size: 400% 400%;
-            animation: rainbowBg 20s ease infinite;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(239, 68, 68, 0.07) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.07) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
             display: flex;
             justify-content: center;
             align-items: flex-start;
             padding: 40px 20px;
+            color: var(--text-primary);
         }
 
-        @keyframes rainbowBg {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* Main Layout Container */
+        /* Container Structure */
         .container {
             width: 100%;
             max-width: 1100px;
             display: grid;
-            grid-template-columns: 1fr 340px;
+            grid-template-columns: 1fr 360px;
             gap: 30px;
             align-items: start;
         }
@@ -44,208 +57,300 @@
             .container {
                 grid-template-columns: 1fr;
             }
-            .results-sidebar {
+            .sidebar {
                 position: relative !important;
                 top: 0 !important;
             }
         }
 
-        /* Glassmorphism Panel Base */
+        /* Light-mode Glass Panels */
         .glass-panel {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
-            color: #fff;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: var(--shadow);
         }
 
-        /* Quiz Header */
+        /* Header Styling */
         .quiz-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: 2.2rem;
             font-weight: 800;
             letter-spacing: -0.5px;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
+
         .quiz-header p {
-            opacity: 0.9;
-            margin-bottom: 30px;
-            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            margin-bottom: 35px;
+            line-height: 1.5;
         }
 
         /* Questions List */
         .questions-list {
             display: flex;
             flex-direction: column;
-            gap: 25px;
+            gap: 24px;
         }
 
-        .question-item {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 15px;
-            padding: 20px;
-            transition: transform 0.3s ease, background 0.3s ease;
+        .question-card {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(241, 245, 249, 0.8);
+            border-radius: 20px;
+            padding: 24px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .question-item:hover {
-            background: rgba(255, 255, 255, 0.15);
+        .question-card:hover {
             transform: translateY(-2px);
+            box-shadow: 0 10px 20px -10px rgba(0,0,0,0.04);
         }
 
         .question-text {
             font-size: 1.1rem;
             font-weight: 600;
-            margin-bottom: 15px;
-            display: flex;
-            gap: 10px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            color: var(--text-primary);
         }
 
         .question-num {
-            opacity: 0.7;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-right: 6px;
         }
 
-        /* Horizontal 4-Point Likert Scale */
-        .likert-scale {
+        /* Radial Options Container */
+        .radial-options {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            gap: 12px;
+            max-width: 550px;
+            margin: 0 auto;
         }
 
-        @media (max-width: 500px) {
-            .likert-scale {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Color-Coded Likert Buttons */
-        .likert-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid transparent;
-            padding: 12px 8px;
-            border-radius: 10px;
-            color: #fff;
-            font-weight: 600;
-            font-size: 0.85rem;
+        .option-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
             cursor: pointer;
-            text-align: center;
-            transition: all 0.25s ease;
         }
 
-        /* Distinct Color-Coded Hover Borders and Selected States */
-        /* SD: Red | D: Orange | A: Light Green | SA: Bright Green */
-        .likert-btn[data-value="1"]:hover { border-color: #ff4d4d; background: rgba(255, 77, 77, 0.2); }
-        .likert-btn[data-value="1"].selected { background: #ff4d4d; box-shadow: 0 0 15px rgba(255, 77, 77, 0.5); }
+        /* Styled Circle Buttons */
+        .circle-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 2px solid #cbd5e1;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
 
-        .likert-btn[data-value="2"]:hover { border-color: #ff9f43; background: rgba(255, 159, 67, 0.2); }
-        .likert-btn[data-value="2"].selected { background: #ff9f43; box-shadow: 0 0 15px rgba(255, 159, 67, 0.5); }
+        .circle-btn::after {
+            content: '';
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: transparent;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scale(0);
+        }
 
-        .likert-btn[data-value="3"]:hover { border-color: #00d2d3; background: rgba(0, 210, 211, 0.2); }
-        .likert-btn[data-value="3"].selected { background: #00d2d3; box-shadow: 0 0 15px rgba(0, 210, 211, 0.5); }
+        /* Option Label Text */
+        .option-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-align: center;
+            transition: color 0.2s ease;
+            user-select: none;
+        }
 
-        .likert-btn[data-value="4"]:hover { border-color: #1dd1a1; background: rgba(29, 209, 161, 0.2); }
-        .likert-btn[data-value="4"].selected { background: #1dd1a1; box-shadow: 0 0 15px rgba(29, 209, 161, 0.5); }
+        /* Color States & Interactive Behaviours */
+        
+        /* 1. Strongly Disagree (Red) */
+        .option-wrapper[data-val="1"]:hover .circle-btn {
+            border-color: var(--color-sd);
+            box-shadow: 0 0 12px rgba(239, 110, 110, 0.2);
+        }
+        .option-wrapper[data-val="1"].selected .circle-btn {
+            border-color: var(--color-sd);
+            background: rgba(239, 68, 68, 0.05);
+        }
+        .option-wrapper[data-val="1"].selected .circle-btn::after {
+            background: var(--color-sd);
+            transform: scale(1);
+        }
+        .option-wrapper[data-val="1"].selected .option-label {
+            color: var(--color-sd);
+        }
 
-        /* Sticky Live Results Sidebar */
-        .results-sidebar {
+        /* 2. Disagree (Orange) */
+        .option-wrapper[data-val="2"]:hover .circle-btn {
+            border-color: var(--color-d);
+            box-shadow: 0 0 12px rgba(249, 115, 22, 0.2);
+        }
+        .option-wrapper[data-val="2"].selected .circle-btn {
+            border-color: var(--color-d);
+            background: rgba(249, 115, 22, 0.05);
+        }
+        .option-wrapper[data-val="2"].selected .circle-btn::after {
+            background: var(--color-d);
+            transform: scale(1);
+        }
+        .option-wrapper[data-val="2"].selected .option-label {
+            color: var(--color-d);
+        }
+
+        /* 3. Agree (Teal) */
+        .option-wrapper[data-val="3"]:hover .circle-btn {
+            border-color: var(--color-a);
+            box-shadow: 0 0 12px rgba(6, 182, 212, 0.2);
+        }
+        .option-wrapper[data-val="3"].selected .circle-btn {
+            border-color: var(--color-a);
+            background: rgba(6, 182, 212, 0.05);
+        }
+        .option-wrapper[data-val="3"].selected .circle-btn::after {
+            background: var(--color-a);
+            transform: scale(1);
+        }
+        .option-wrapper[data-val="3"].selected .option-label {
+            color: var(--color-a);
+        }
+
+        /* 4. Strongly Agree (Green) */
+        .option-wrapper[data-val="4"]:hover .circle-btn {
+            border-color: var(--color-sa);
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
+        }
+        .option-wrapper[data-val="4"].selected .circle-btn {
+            border-color: var(--color-sa);
+            background: rgba(16, 185, 129, 0.05);
+        }
+        .option-wrapper[data-val="4"].selected .circle-btn::after {
+            background: var(--color-sa);
+            transform: scale(1);
+        }
+        .option-wrapper[data-val="4"].selected .option-label {
+            color: var(--color-sa);
+        }
+
+        /* Sticky Sidebar Results */
+        .sidebar {
             position: sticky;
             top: 40px;
         }
 
         .results-title {
-            font-size: 1.4rem;
-            margin-bottom: 25px;
+            font-size: 1.3rem;
             font-weight: 700;
-            text-align: center;
-            border-bottom: 2px solid rgba(255,255,255,0.2);
-            padding-bottom: 10px;
+            margin-bottom: 25px;
+            color: var(--text-primary);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            padding-bottom: 12px;
         }
 
         .trait-container {
-            margin-bottom: 22px;
+            margin-bottom: 20px;
         }
 
-        .trait-info {
+        .trait-labels {
             display: flex;
             justify-content: space-between;
             margin-bottom: 6px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
+            color: var(--text-secondary);
         }
 
-        .trait-bar-bg {
+        .bar-bg {
             width: 100%;
-            height: 14px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 7px;
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 5px;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .trait-bar-fill {
+        .bar-fill {
             height: 100%;
-            width: 50%; /* Default middle ground */
-            border-radius: 7px;
-            transition: width 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 50%; /* Starts at neutral 50% midpoint */
+            border-radius: 5px;
+            transition: width 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.2);
         }
 
-        /* Rainbow spectrum assignments for the dynamic result bars */
-        #e-i-fill { background: linear-gradient(90deg, #ff0055, #ff5000); }
-        #s-n-fill { background: linear-gradient(90deg, #ffcc00, #00ff66); }
-        #t-f-fill { background: linear-gradient(90deg, #00ff66, #00ffff); }
-        #j-p-fill { background: linear-gradient(90deg, #00ffff, #ff00ff); }
+        /* Custom dynamic gradient bars to pop off the white surface */
+        #e-i-fill { background: linear-gradient(90deg, #f43f5e, #fb7185); }
+        #s-n-fill { background: linear-gradient(90deg, #0ea5e9, #38bdf8); }
+        #t-f-fill { background: linear-gradient(90deg, #ec4899, #f472b6); }
+        #j-p-fill { background: linear-gradient(90deg, #10b981, #34d399); }
 
-        .status-panel {
+        /* Completion & Counter Badge */
+        .status-badge {
             margin-top: 25px;
             text-align: center;
-            font-size: 0.95rem;
-            background: rgba(0,0,0,0.15);
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: rgba(241, 245, 249, 0.6);
             padding: 12px;
-            border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            transition: all 0.3s ease;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
+        <!-- Left Side: List of Questions -->
         <div class="glass-panel">
             <div class="quiz-header">
-                <h1>Spectrum Assessment</h1>
-                <p>Scroll through and answer the statements below to watch your profile calculate live.</p>
+                <h1>Spectrum Analysis</h1>
+                <p>Please review each statement below and indicate your preference using the options provided. Your metrics will balance and shift live.</p>
             </div>
 
             <div class="questions-list" id="quiz-container">
-                </div>
+                <!-- Injected via JavaScript -->
+            </div>
         </div>
 
-        <div class="glass-panel results-sidebar">
-            <h2 class="results-title">Live Rainbow Metrics</h2>
+        <!-- Right Side: Sticky Live Metrics Sidebar -->
+        <div class="glass-panel sidebar">
+            <h2 class="results-title">Live Personality Dynamics</h2>
             
             <div class="trait-container">
-                <div class="trait-info"><span>Introversion</span><span>Extroversion</span></div>
-                <div class="trait-bar-bg"><div id="e-i-fill" class="trait-bar-fill"></div></div>
+                <div class="trait-labels"><span>Introversion</span><span>Extroversion</span></div>
+                <div class="bar-bg"><div id="e-i-fill" class="bar-fill"></div></div>
             </div>
 
             <div class="trait-container">
-                <div class="trait-info"><span>Sensing</span><span>Intuition</span></div>
-                <div class="trait-bar-bg"><div id="s-n-fill" class="trait-bar-fill"></div></div>
+                <div class="trait-labels"><span>Sensing</span><span>Intuition</span></div>
+                <div class="bar-bg"><div id="s-n-fill" class="bar-fill"></div></div>
             </div>
 
             <div class="trait-container">
-                <div class="trait-info"><span>Thinking</span><span>Feeling</span></div>
-                <div class="trait-bar-bg"><div id="t-f-fill" class="trait-bar-fill"></div></div>
+                <div class="trait-labels"><span>Thinking</span><span>Feeling</span></div>
+                <div class="bar-bg"><div id="t-f-fill" class="bar-fill"></div></div>
             </div>
 
             <div class="trait-container">
-                <div class="trait-info"><span>Judging</span><span>Perceiving</span></div>
-                <div class="trait-bar-bg"><div id="j-p-fill" class="trait-bar-fill"></div></div>
+                <div class="trait-labels"><span>Judging</span><span>Perceiving</span></div>
+                <div class="bar-bg"><div id="j-p-fill" class="bar-fill"></div></div>
             </div>
 
-            <div class="status-panel" id="status-text">
+            <div class="status-badge" id="status-badge">
                 0 of 10 statements answered.
             </div>
         </div>
@@ -265,57 +370,64 @@
             { id: 9, text: "An unstructured schedule makes you feel completely lost and stressed.", trait: "JP", reverse: true }
         ];
 
-        // Track answers: key is question index, value is 1 through 4
+        // Track user answers (questionIndex -> numeric choice 1 to 4)
         let answers = {};
 
-        function buildQuiz() {
+        function renderQuiz() {
             const container = document.getElementById('quiz-container');
             container.innerHTML = '';
 
             questions.forEach((q, index) => {
-                const item = document.createElement('div');
-                item.className = 'question-item';
-                item.innerHTML = `
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.innerHTML = `
                     <div class="question-text">
-                        <span class="question-num">${index + 1}.</span>
+                        <span class="question-num">${String(index + 1).padStart(2, '0')}.</span>
                         <span>${q.text}</span>
                     </div>
-                    <div class="likert-scale">
-                        <button class="likert-btn" data-q="${index}" data-value="1">Strongly Disagree</button>
-                        <button class="likert-btn" data-q="${index}" data-value="2">Disagree</button>
-                        <button class="likert-btn" data-q="${index}" data-value="3">Agree</button>
-                        <button class="likert-btn" data-q="${index}" data-value="4">Strongly Agree</button>
+                    <div class="radial-options">
+                        <div class="option-wrapper" data-q="${index}" data-val="1">
+                            <div class="circle-btn"></div>
+                            <span class="option-label">Strongly<br>Disagree</span>
+                        </div>
+                        <div class="option-wrapper" data-q="${index}" data-val="2">
+                            <div class="circle-btn"></div>
+                            <span class="option-label">Disagree</span>
+                        </div>
+                        <div class="option-wrapper" data-q="${index}" data-val="3">
+                            <div class="circle-btn"></div>
+                            <span class="option-label">Agree</span>
+                        </div>
+                        <div class="option-wrapper" data-q="${index}" data-val="4">
+                            <div class="circle-btn"></div>
+                            <span class="option-label">Strongly<br>Agree</span>
+                        </div>
                     </div>
                 `;
-                container.appendChild(item);
+                container.appendChild(card);
             });
 
-            // Set up click listeners for all scale options
-            document.querySelectorAll('.likert-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const qIndex = parseInt(this.getAttribute('data-q'));
-                    const val = parseInt(this.getAttribute('data-value'));
+            // Handle clicking the custom radial options
+            document.querySelectorAll('.option-wrapper').forEach(wrapper => {
+                wrapper.addEventListener('click', function() {
+                    const qIdx = parseInt(this.getAttribute('data-q'));
+                    const val = parseInt(this.getAttribute('data-val'));
                     
-                    handleSelection(qIndex, val, this);
+                    // Clear previous selection in this specific question block
+                    const siblings = this.parentElement.querySelectorAll('.option-wrapper');
+                    siblings.forEach(node => node.classList.remove('selected'));
+                    
+                    // Style current choice
+                    this.classList.add('selected');
+                    
+                    // Save and trigger calculations
+                    answers[qIdx] = val;
+                    updateMetrics();
                 });
             });
         }
 
-        function handleSelection(qIndex, val, clickedBtn) {
-            answers[qIndex] = val;
-
-            // Clear active selection states within this specific question block
-            const siblings = clickedBtn.parentElement.querySelectorAll('.likert-btn');
-            siblings.forEach(btn => btn.classList.remove('selected'));
-            
-            // Activate selected option style
-            clickedBtn.classList.add('selected');
-
-            // Instantly compute results and trigger spring animations
-            updateLiveMetrics();
-        }
-
-        function updateLiveMetrics() {
+        function updateMetrics() {
             let traits = { 
                 EI: { score: 0, count: 0 }, 
                 SN: { score: 0, count: 0 }, 
@@ -323,13 +435,13 @@
                 JP: { score: 0, count: 0 } 
             };
 
-            // Calculate current profile weight balances
+            // Calculate current scores
             Object.keys(answers).forEach(qIdxStr => {
                 const qIdx = parseInt(qIdxStr);
                 const val = answers[qIdx];
                 const q = questions[qIdx];
                 
-                // Shift 1-4 option value down to a neutral relative balance window (-1.5 to +1.5)
+                // Shift 1-4 option value down to a relative balance window (-1.5 to +1.5)
                 let balanceValue = val - 2.5;
                 if (q.reverse) {
                     balanceValue = -balanceValue;
@@ -339,39 +451,43 @@
                 traits[q.trait].count++;
             });
 
-            // Update DOM progress bars widths based on balances
-            animateBar("e-i-fill", traits.EI);
-            animateBar("s-n-fill", traits.SN);
-            animateBar("t-f-fill", traits.TF);
-            animateBar("j-p-fill", traits.JP);
+            // Update DOM progress widths smoothly
+            adjustBarWidth("e-i-fill", traits.EI);
+            adjustBarWidth("s-n-fill", traits.SN);
+            adjustBarWidth("t-f-fill", traits.TF);
+            adjustBarWidth("j-p-fill", traits.JP);
 
-            // Update user response status copy block
+            // Update user status copy
             const answeredCount = Object.keys(answers).length;
-            const statusBox = document.getElementById('status-text');
+            const badge = document.getElementById('status-badge');
             if (answeredCount === questions.length) {
-                statusBox.innerHTML = "🌈 <strong>Profile Completed!</strong> Your matches are locked.";
-                statusBox.style.background = "rgba(0, 255, 100, 0.25)";
+                badge.innerHTML = "✨ <strong>Evaluation Complete!</strong> Dynamics locked.";
+                badge.style.background = "rgba(16, 185, 129, 0.1)";
+                badge.style.color = "var(--color-sa)";
+                badge.style.borderColor = "rgba(16, 185, 129, 0.3)";
             } else {
-                statusBox.innerHTML = `<strong>${answeredCount} of ${questions.length}</strong> statements answered.`;
-                statusBox.style.background = "rgba(0,0,0,0.15)";
+                badge.innerHTML = `<strong>${answeredCount} of ${questions.length}</strong> statements answered.`;
+                badge.style.background = "rgba(241, 245, 249, 0.6)";
+                badge.style.color = "var(--text-secondary)";
+                badge.style.borderColor = "rgba(226, 232, 240, 0.5)";
             }
         }
 
-        function animateBar(elementId, traitData) {
+        function adjustBarWidth(elementId, traitData) {
             const bar = document.getElementById(elementId);
             if (traitData.count === 0) {
-                bar.style.width = "50%"; // Keep balanced perfectly centered until option is chosen
+                bar.style.width = "50%"; // Centered fallback
                 return;
             }
 
             const average = traitData.score / traitData.count;
-            // Map the balance accurately over visual scale widths (min 12% to max 88%)
-            let targetPercentage = 50 + (average / 1.5) * 38;
+            // Map the balance accurately over visual scale widths (min 10% to max 90%)
+            let targetPercentage = 50 + (average / 1.5) * 40;
             bar.style.width = `${targetPercentage}%`;
         }
 
-        // Run application setup on window load
-        buildQuiz();
+        // Initialize App
+        renderQuiz();
     </script>
 </body>
 </html>
