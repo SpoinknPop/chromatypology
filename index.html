@@ -19,6 +19,213 @@
             --color-sa: #10b981; 
         }
 
+        /* ── TOP-LEVEL NAV TABS ── */
+        .main-nav {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto 24px;
+            display: flex;
+            gap: 8px;
+        }
+        .main-tab-btn {
+            padding: 10px 24px;
+            border-radius: 14px 14px 0 0;
+            border: 1px solid rgba(226,232,240,0.8);
+            border-bottom: none;
+            background: rgba(255,255,255,0.5);
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 0.01em;
+        }
+        .main-tab-btn.active {
+            background: rgba(255,255,255,0.95);
+            color: var(--text-primary);
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+        }
+        .main-tab-btn:hover:not(.active) {
+            background: rgba(255,255,255,0.75);
+            color: var(--text-primary);
+        }
+        .main-tab-content { display: none; }
+        .main-tab-content.active { display: block; }
+
+        /* ── CHROMATYPOLOGY PAGE ── */
+        .chroma-page {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Inner tab bar */
+        .inner-tabs {
+            display: flex;
+            gap: 6px;
+            border-bottom: 2px solid rgba(226,232,240,0.8);
+            margin-bottom: 28px;
+        }
+        .inner-tab-btn {
+            padding: 9px 20px;
+            border: none;
+            background: transparent;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            border-radius: 4px 4px 0 0;
+            transition: all 0.2s;
+        }
+        .inner-tab-btn.active {
+            color: #4f46e5;
+            border-bottom-color: #4f46e5;
+        }
+        .inner-tab-btn:hover:not(.active) {
+            color: var(--text-primary);
+            background: rgba(79,70,229,0.05);
+        }
+        .inner-tab-panel { display: none; }
+        .inner-tab-panel.active { display: block; }
+
+        /* Info section prose */
+        .chroma-intro { max-width: 780px; }
+        .chroma-intro h2 {
+            font-size: 1.7rem;
+            font-weight: 800;
+            letter-spacing: -0.4px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #1e293b 0%, #4f46e5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .chroma-intro p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+        .chroma-intro h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 24px 0 8px;
+            color: var(--text-primary);
+        }
+        .chroma-intro .example-box {
+            background: rgba(79,70,229,0.05);
+            border: 1px solid rgba(79,70,229,0.15);
+            border-radius: 14px;
+            padding: 18px 22px;
+            margin: 20px 0;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--text-primary);
+        }
+        .chroma-intro .example-box strong { color: #4f46e5; }
+
+        /* Layers cards */
+        .layers-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-top: 20px;
+        }
+        @media(max-width:700px){ .layers-grid { grid-template-columns: 1fr; } }
+        .layer-card {
+            border-radius: 18px;
+            padding: 22px;
+            border: 1px solid transparent;
+        }
+        .layer-card.id-card  { background: rgba(239,68,68,0.05); border-color: rgba(239,68,68,0.15); }
+        .layer-card.ego-card { background: rgba(6,182,212,0.05); border-color: rgba(6,182,212,0.15); }
+        .layer-card.sup-card { background: rgba(16,185,129,0.05); border-color: rgba(16,185,129,0.15); }
+        .layer-card h4 {
+            font-size: 1rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        .layer-card.id-card  h4 { color: #ef4444; }
+        .layer-card.ego-card h4 { color: #0891b2; }
+        .layer-card.sup-card h4 { color: #059669; }
+        .layer-card p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; }
+
+        /* Motivations section */
+        .motives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 14px;
+            margin-top: 20px;
+        }
+        .motive-card {
+            border-radius: 14px;
+            padding: 16px 18px;
+            border: 1px solid rgba(226,232,240,0.9);
+            background: rgba(255,255,255,0.6);
+            transition: box-shadow 0.2s;
+        }
+        .motive-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.07); }
+        .motive-name {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        .motive-desc {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Full archetype table */
+        .archetype-table-wrap { overflow-x: auto; margin-top: 20px; }
+        .archetype-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        .archetype-table th {
+            padding: 10px 14px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: rgba(241,245,249,0.8);
+            border-bottom: 2px solid rgba(226,232,240,0.8);
+            color: var(--text-secondary);
+        }
+        .archetype-table th.id-h  { color: #ef4444; }
+        .archetype-table th.ego-h { color: #0891b2; }
+        .archetype-table th.sup-h { color: #059669; }
+        .archetype-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid rgba(226,232,240,0.6);
+            vertical-align: top;
+        }
+        .archetype-table tr:last-child td { border-bottom: none; }
+        .archetype-table tr:hover td { background: rgba(241,245,249,0.5); }
+        .motivation-col {
+            font-weight: 700;
+            color: var(--text-primary);
+            white-space: nowrap;
+        }
+        .archetype-cell .color-name { font-weight: 700; color: var(--text-primary); }
+        .archetype-cell .archetype-title { color: #4f46e5; font-style: italic; font-size: 0.82rem; }
+        .archetype-cell .traits { font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px; }
+
+        /* Color swatches */
+        .swatch {
+            display: inline-block;
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+        /* Disordered row */
+        .archetype-table tr.disordered-row td { background: rgba(15,23,42,0.03); }
+        .archetype-table tr.disordered-row .motivation-col { color: #64748b; font-style: italic; }
+
         * {
             margin: 0;
             padding: 0;
@@ -33,16 +240,11 @@
                 radial-gradient(at 0% 0%, rgba(239, 68, 68, 0.04) 0px, transparent 50%),
                 radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.04) 0px, transparent 50%),
                 radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.04) 0px, transparent 50%);
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 40px 20px;
             color: var(--text-primary);
         }
 
         .container {
             width: 100%;
-            max-width: 1100px;
             display: grid;
             grid-template-columns: 1fr 360px;
             gap: 30px;
@@ -374,66 +576,251 @@
 </head>
 <body>
 
-    <div class="container">
-        <!-- Pagination Form -->
-        <div class="glass-panel">
-            <div class="quiz-header">
-                <div class="sync-status" id="sync-indicator">
-                    <span class="sync-dot"></span>
-                    <span id="sync-text">Connecting to database...</span>
-                </div>
-                <h1>Spectrum Inventory</h1>
-                <p>Answer at least 36 questions to unlock your metrics summaries. You may finish the full assessment or stop at any point once unlocked.</p>
-            </div>
-
-            <div id="quiz-pages-container">
-                <!-- Programmatically generated pages populated below -->
-            </div>
-
-            <div class="pagination-controls">
-                <button class="nav-btn" id="prev-btn" onclick="changePage(-1)">Previous</button>
-                <span class="page-indicator" id="page-indicator">Page 1 of 16</span>
-                <button class="nav-btn" id="next-btn" onclick="changePage(1)">Next Page</button>
-            </div>
-        </div>
-
-        <!-- Metric Dashboard Panel containing Blur Gatekeeping layers -->
-        <div class="glass-panel sidebar">
-            <h2 class="results-title">Your Profile Dynamics</h2>
-            
-            <div class="results-container">
-                <!-- Overlay shielding metrics -->
-                <div class="blur-overlay" id="blur-gate">
-                    <p class="gate-msg" id="gate-msg">Complete 36 statements<br>to view live calculations.</p>
-                    <button class="unlock-btn" id="unlock-action-btn" onclick="revealMetrics()">Reveal Data</button>
-                </div>
-
-                <!-- Hidden Target metrics container -->
-                <div class="blur-wrapper locked" id="metrics-wrapper">
-                    <div class="trait-container">
-                        <div class="trait-labels"><span>Introversion</span><span>Extroversion</span></div>
-                        <div class="bar-bg"><div id="e-i-fill" class="bar-fill"></div></div>
-                    </div>
-                    <div class="trait-container">
-                        <div class="trait-labels"><span>Sensing</span><span>Intuition</span></div>
-                        <div class="bar-bg"><div id="s-n-fill" class="bar-fill"></div></div>
-                    </div>
-                    <div class="trait-container">
-                        <div class="trait-labels"><span>Thinking</span><span>Feeling</span></div>
-                        <div class="bar-bg"><div id="t-f-fill" class="bar-fill"></div></div>
-                    </div>
-                    <div class="trait-container">
-                        <div class="trait-labels"><span>Judging</span><span>Perceiving</span></div>
-                        <div class="bar-bg"><div id="j-p-fill" class="bar-fill"></div></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="status-badge" id="status-badge">
-                0 of 144 answered.
-            </div>
-        </div>
+    <!-- ── TOP-LEVEL TABS ── -->
+    <div style="width:100%;max-width:1100px;margin:40px auto 0;padding:0 20px;">
+        <nav class="main-nav">
+            <button class="main-tab-btn active" onclick="switchMainTab('quiz-tab', this)">Spectrum Inventory</button>
+            <button class="main-tab-btn" onclick="switchMainTab('chroma-tab', this)">Chromatypology</button>
+        </nav>
     </div>
+
+    <div style="width:100%;max-width:1100px;margin:0 auto;padding:0 20px 40px;">
+
+        <!-- ══════════ QUIZ TAB ══════════ -->
+        <div id="quiz-tab" class="main-tab-content active">
+            <div class="container" style="margin:0;padding:0;">
+                <!-- Pagination Form -->
+                <div class="glass-panel">
+                    <div class="quiz-header">
+                        <div class="sync-status" id="sync-indicator">
+                            <span class="sync-dot"></span>
+                            <span id="sync-text">Connecting to database...</span>
+                        </div>
+                        <h1>Spectrum Inventory</h1>
+                        <p>Answer at least 36 questions to unlock your metrics summaries. You may finish the full assessment or stop at any point once unlocked.</p>
+                    </div>
+
+                    <div id="quiz-pages-container"></div>
+
+                    <div class="pagination-controls">
+                        <button class="nav-btn" id="prev-btn" onclick="changePage(-1)">Previous</button>
+                        <span class="page-indicator" id="page-indicator">Page 1 of 16</span>
+                        <button class="nav-btn" id="next-btn" onclick="changePage(1)">Next Page</button>
+                    </div>
+                </div>
+
+                <!-- Metric Dashboard Panel -->
+                <div class="glass-panel sidebar">
+                    <h2 class="results-title">Your Profile Dynamics</h2>
+                    <div class="results-container">
+                        <div class="blur-overlay" id="blur-gate">
+                            <p class="gate-msg" id="gate-msg">Complete 36 statements<br>to view live calculations.</p>
+                            <button class="unlock-btn" id="unlock-action-btn" onclick="revealMetrics()">Reveal Data</button>
+                        </div>
+                        <div class="blur-wrapper locked" id="metrics-wrapper">
+                            <div class="trait-container">
+                                <div class="trait-labels"><span>Introversion</span><span>Extroversion</span></div>
+                                <div class="bar-bg"><div id="e-i-fill" class="bar-fill"></div></div>
+                            </div>
+                            <div class="trait-container">
+                                <div class="trait-labels"><span>Sensing</span><span>Intuition</span></div>
+                                <div class="bar-bg"><div id="s-n-fill" class="bar-fill"></div></div>
+                            </div>
+                            <div class="trait-container">
+                                <div class="trait-labels"><span>Thinking</span><span>Feeling</span></div>
+                                <div class="bar-bg"><div id="t-f-fill" class="bar-fill"></div></div>
+                            </div>
+                            <div class="trait-container">
+                                <div class="trait-labels"><span>Judging</span><span>Perceiving</span></div>
+                                <div class="bar-bg"><div id="j-p-fill" class="bar-fill"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="status-badge" id="status-badge">0 of 144 answered.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════ CHROMATYPOLOGY TAB ══════════ -->
+        <div id="chroma-tab" class="main-tab-content">
+            <div class="glass-panel chroma-page">
+
+                <!-- Inner tab bar -->
+                <div class="inner-tabs">
+                    <button class="inner-tab-btn active" onclick="switchInnerTab('about-panel', this)">About</button>
+                    <button class="inner-tab-btn" onclick="switchInnerTab('layers-panel', this)">The Three Layers</button>
+                    <button class="inner-tab-btn" onclick="switchInnerTab('motives-panel', this)">Motivations</button>
+                    <button class="inner-tab-btn" onclick="switchInnerTab('archetypes-panel', this)">All Archetypes</button>
+                </div>
+
+                <!-- ── ABOUT ── -->
+                <div id="about-panel" class="inner-tab-panel active">
+                    <div class="chroma-intro">
+                        <h2>What is Chromatypology?</h2>
+                        <p>Chromatypology is a personality and typology system that uses different hues of color to express <strong>12 core motivations</strong>, each divided across three Freudian layers of the psyche — the <em>id</em>, <em>ego</em>, and <em>superego</em> — resulting in <strong>36 distinct archetypes</strong>.</p>
+                        <p>To find your type, you identify one archetype from each layer, with each coming from a <em>different</em> motivation. The combination of these three archetypes forms your unique Chromatypology profile.</p>
+
+                        <h3>How to type yourself</h3>
+                        <p>Select one id, one ego, and one superego archetype — each from a different motivation. You can express your type by color name shorthand or archetype name shorthand.</p>
+                        <div class="example-box">
+                            <strong>Example type: Amber · Cyan · Cornflower</strong><br>
+                            Id (Peace): <strong>Amber</strong> — "The Gourmand"<br>
+                            Ego (Knowledge): <strong>Cyan</strong> — "The Scholar"<br>
+                            Superego (Expression): <strong>Cornflower</strong> — "The Creator"<br><br>
+                            Shorthand: <strong>AmbCyaCor</strong> &nbsp;or&nbsp; <strong>GouSchCre</strong>
+                        </div>
+                        <p>There is also a <strong>Disordered</strong> category (Black, Gray, White) that sits outside the standard 12 motivations and represents extreme, unhealthy manifestations of personality.</p>
+                    </div>
+                </div>
+
+                <!-- ── THREE LAYERS ── -->
+                <div id="layers-panel" class="inner-tab-panel">
+                    <div class="chroma-intro">
+                        <h2>The Three Layers</h2>
+                        <p>Chromatypology maps each archetype to one of three Freudian structures of the psyche. Each layer contributes something distinct to your overall personality profile.</p>
+                    </div>
+                    <div class="layers-grid">
+                        <div class="layer-card id-card">
+                            <h4>Id</h4>
+                            <p>Present from birth, the id is unconscious and instinctive — driven purely by pleasure and immediate gratification. In Chromatypology, it reflects our <em>weakest or least healthy</em> behaviors, rooted in egocentric impulses.</p>
+                        </div>
+                        <div class="layer-card ego-card">
+                            <h4>Ego</h4>
+                            <p>The ego operates in reality. It is the core of our conscious, tangible behavior — balancing the raw id and the idealistic superego through coping and defense mechanisms. The ego is the closest thing to our everyday sense of self.</p>
+                        </div>
+                        <div class="layer-card sup-card">
+                            <h4>Superego</h4>
+                            <p>The superego is shaped by upbringing, culture, and morality. It provides internalized ideals and social guidelines. Though morally ambitious, it doesn't always align with what is genuinely ethical — that balance falls to the ego.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── MOTIVATIONS ── -->
+                <div id="motives-panel" class="inner-tab-panel">
+                    <div class="chroma-intro">
+                        <h2>The 12 Motivations</h2>
+                        <p>Motivations are the intrinsic and extrinsic "why" behind our actions and behaviors. Every archetype in Chromatypology is grounded in one of these 12 foundational drives.</p>
+                    </div>
+                    <div class="motives-grid">
+                        <div class="motive-card"><div class="motive-name">⚔️ Control</div><div class="motive-desc">Independence · Power · Authority</div></div>
+                        <div class="motive-card"><div class="motive-name">📐 Perfection</div><div class="motive-desc">Law · Standards · Morality</div></div>
+                        <div class="motive-card"><div class="motive-name">🌟 Fame</div><div class="motive-desc">Reputation · Popularity · Integration</div></div>
+                        <div class="motive-card"><div class="motive-name">☁️ Peace</div><div class="motive-desc">Serenity · Satisfaction · Diplomacy</div></div>
+                        <div class="motive-card"><div class="motive-name">🦋 Freedom</div><div class="motive-desc">Possibility · Liberty · Thrill</div></div>
+                        <div class="motive-card"><div class="motive-name">🏆 Success</div><div class="motive-desc">Achievements · Victory · Work</div></div>
+                        <div class="motive-card"><div class="motive-name">🔬 Knowledge</div><div class="motive-desc">Facts · Understanding · Curiosity</div></div>
+                        <div class="motive-card"><div class="motive-name">🤝 Service</div><div class="motive-desc">Empathy · Support · Positivity</div></div>
+                        <div class="motive-card"><div class="motive-name">🎨 Expression</div><div class="motive-desc">Passion · Expression · Creation</div></div>
+                        <div class="motive-card"><div class="motive-name">🏡 Stability</div><div class="motive-desc">Security · Preparation · Reliability</div></div>
+                        <div class="motive-card"><div class="motive-name">💞 Connection</div><div class="motive-desc">People · Authenticity · Trust</div></div>
+                        <div class="motive-card"><div class="motive-name">🌹 Eroticism</div><div class="motive-desc">Optimism · Romance · Idealism</div></div>
+                    </div>
+                </div>
+
+                <!-- ── ALL ARCHETYPES ── -->
+                <div id="archetypes-panel" class="inner-tab-panel">
+                    <div class="chroma-intro" style="margin-bottom:20px;">
+                        <h2>All 36 Archetypes</h2>
+                        <p>Each motivation produces three archetypes — one per layer. Find the colors and titles that resonate with you to discover your type.</p>
+                    </div>
+                    <div class="archetype-table-wrap">
+                        <table class="archetype-table">
+                            <thead>
+                                <tr>
+                                    <th>Motivation</th>
+                                    <th class="id-h">Id</th>
+                                    <th class="ego-h">Ego</th>
+                                    <th class="sup-h">Superego</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="motivation-col">Control</td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#dc2626"></span><span class="color-name">Crimson</span> <span class="archetype-title">"The Challenger"</span><div class="traits">Confrontational · Argumentative · Assertive</div></div></td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#ef4444"></span><span class="color-name">Red</span> <span class="archetype-title">"The Ruler"</span><div class="traits">Authoritative · Decisive · Commanding</div></div></td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#fca5a5"></span><span class="color-name">Salmon</span> <span class="archetype-title">"The Activist"</span><div class="traits">Principled · Proactive · Enterprising</div></div></td>
+                                </tr>
+                                <tr>
+                                    <td class="motivation-col">Perfection</td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#7f1d1d"></span><span class="color-name">Maroon</span> <span class="archetype-title">"The Purist"</span><div class="traits">Rigid · Corrective · Judgemental</div></div></td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#e11d48"></span><span class="color-name">Scarlet</span> <span class="archetype-title">"The Inspector"</span><div class="traits">Systematic · Disciplined · Precise</div></div></td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#f97316"></span><span class="color-name">Vermillion</span> <span class="archetype-title">"The Reformer"</span><div class="traits">Visionary · Ambitious · Tenacious</div></div></td>
+                                </tr>
+                                <tr>
+                                    <td class="motivation-col">Fame</td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#92400e"></span><span class="color-name">Hazel</span> <span class="archetype-title">"The Trickster"</span><div class="traits">Mischievous · Unpredictable · Attention-seeking</div></div></td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#f97316"></span><span class="color-name">Orange</span> <span class="archetype-title">"The Jester"</span><div class="traits">Playful · Entertaining · Loud</div></div></td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#ca8a04"></span><span class="color-name">Khaki</span> <span class="archetype-title">"The Socialite"</span><div class="traits">Polished · Image-conscious · Networked</div></div></td>
+                                </tr>
+                                <tr>
+                                    <td class="motivation-col">Peace</td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#d97706"></span><span class="color-name">Amber</span> <span class="archetype-title">"The Gourmand"</span><div class="traits">Indulgent · Addictive · Indolent</div></div></td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#eab308"></span><span class="color-name">Yellow</span> <span class="archetype-title">"The Stoic"</span><div class="traits">Flexible · Composed · Relaxed</div></div></td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#fde047"></span><span class="color-name">Aureolin</span> <span class="archetype-title">"The Mediator"</span><div class="traits">Diplomatic · Peaceful · Tranquil</div></div></td>
+                                </tr>
+                                <tr>
+                                    <td class="motivation-col">Freedom</td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#4d7c0f"></span><span class="color-name">Olive</span> <span class="archetype-title">"The Rebel"</span><div class="traits">Defiant · Impulsive · Uncontrollable</div></div></td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#84cc16"></span><span class="color-name">Chartreuse</span> <span class="archetype-title">"The Gambler"</span><div class="traits">Confident · Risk-taking · Thrill-seeking</div></div></td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#a3e635"></span><span class="color-name">Lime</span> <span class="archetype-title">"The Explorer"</span><div class="traits">Adaptive · Adventurous · Spontaneous</div></div></td>
+                                </tr>
+                                <tr>
+                                    <td class="motivation-col">Success</td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#047857"></span><span class="color-name">Emerald</span> <span class="archetype-title">"The Alchemist"</span><div class="traits">Workaholic · Monotonous · Envious</div></div></td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#16a34a"></span><span class="color-name">Green</span> <span class="archetype-title">"The Achiever"</span><div class="traits">Driven · Productive · Goal-oriented</div></div></td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#86efac"></span><span class="color-name">Sage</span> <span class="archetype-title">"The Champion"</span><div class="traits">Competitive · Dominant · Athletic</div></div></td>
+                                </tr>
+                                <tr>
+                                    <td class="motivation-col">Knowledge</td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#0f766e"></span><span class="color-name">Viridian</span> <span class="archetype-title">"The Ruminator"</span><div class="traits">Introspective · Isolated · Analytical</div></div></td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#06b6d4"></span><span class="color-name">Cyan</span> <span class="archetype-title">"The Scholar"</span><div class="traits">Logical · Knowledgeable · Sage</div></div></td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#99f6e4"></span><span class="color-name">Celadon</span> <span class="archetype-title">"The Investigator"</span><div class="traits">Curious · Open-Minded · Perceptive</div></div></td>
+                                </tr>
+                                <tr>
+                                    <td class="motivation-col">Service</td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#0f766e"></span><span class="color-name">Teal</span> <span class="archetype-title">"The Martyr"</span><div class="traits">Burdened · Obliging · Self-sacrificing</div></div></td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#0ea5e9"></span><span class="color-name">Azure</span> <span class="archetype-title">"The Hero"</span><div class="traits">Brave · Admirable · Dutiful</div></div></td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#7dd3fc"></span><span class="color-name">Cerulean</span> <span class="archetype-title">"The Helper"</span><div class="traits">Humble · Altruistic · Compassionate</div></div></td>
+                                </tr>
+                                <tr>
+                                    <td class="motivation-col">Expression</td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#1e3a8a"></span><span class="color-name">Navy</span> <span class="archetype-title">"The Empath"</span><div class="traits">Sensitive · Neurotic · Intense</div></div></td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#3b82f6"></span><span class="color-name">Blue</span> <span class="archetype-title">"The Artist"</span><div class="traits">Expressive · Imaginative · Emotive</div></div></td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#93c5fd"></span><span class="color-name">Cornflower</span> <span class="archetype-title">"The Creator"</span><div class="traits">Inspired · Multipotentialed · Resourceful</div></div></td>
+                                </tr>
+                                <tr>
+                                    <td class="motivation-col">Stability</td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#312e81"></span><span class="color-name">Indigo</span> <span class="archetype-title">"The Strategist"</span><div class="traits">Pessimistic · Calculated · Foresighted</div></div></td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#7c3aed"></span><span class="color-name">Violet</span> <span class="archetype-title">"The Orphan"</span><div class="traits">Vulnerable · Dependent · Skeptical</div></div></td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#c4b5fd"></span><span class="color-name">Periwinkle</span> <span class="archetype-title">"The Guardian"</span><div class="traits">Protective · Reliable · Steadfast</div></div></td>
+                                </tr>
+                                <tr>
+                                    <td class="motivation-col">Connection</td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#6b21a8"></span><span class="color-name">Plum</span> <span class="archetype-title">"The Puppeteer"</span><div class="traits">Manipulative · Self-Absorbed · Opportunistic</div></div></td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#a855f7"></span><span class="color-name">Purple</span> <span class="archetype-title">"The Charmer"</span><div class="traits">Engaging · Persuasive · Magnetic</div></div></td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#e9d5ff"></span><span class="color-name">Lavender</span> <span class="archetype-title">"The Confidant"</span><div class="traits">Trustworthy · Loyal · Understanding</div></div></td>
+                                </tr>
+                                <tr>
+                                    <td class="motivation-col">Eroticism</td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#c026d3"></span><span class="color-name">Fuchsia</span> <span class="archetype-title">"The Limerent"</span><div class="traits">Obsessive · Delusional · Anxious</div></div></td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#e879f9"></span><span class="color-name">Magenta</span> <span class="archetype-title">"The Dreamer"</span><div class="traits">Romantic · Yearning · Optimistic</div></div></td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#fbcfe8"></span><span class="color-name">Pink</span> <span class="archetype-title">"The Lover"</span><div class="traits">Intimate · Passionate · Sensual</div></div></td>
+                                </tr>
+                                <tr class="disordered-row">
+                                    <td class="motivation-col">Disordered</td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#0f172a"></span><span class="color-name">Black</span> <span class="archetype-title">"The Malevolent"</span><div class="traits">Narcissistic · Apathetic · Machiavellian</div></div></td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#9ca3af"></span><span class="color-name">Gray</span> <span class="archetype-title">"The Mimic"</span><div class="traits">Ambiguous · Imitative · Borderline</div></div></td>
+                                    <td><div class="archetype-cell"><span class="swatch" style="background:#f1f5f9;border:1px solid #e2e8f0;"></span><span class="color-name">White</span> <span class="archetype-title">"The Hollow"</span><div class="traits">Empty · Inert · Avoidant</div></div></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div><!-- /glass-panel -->
+        </div><!-- /chroma-tab -->
+
+    </div><!-- /outer wrapper -->
 
     <!-- Firebase Integration modules -->
     <script type="module">
@@ -764,6 +1151,21 @@
 
         // Initialize App Setup
         initFirebase();
+
+        // ── TAB SWITCHING ──
+        window.switchMainTab = function(tabId, btn) {
+            document.querySelectorAll('.main-tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.main-tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+        };
+
+        window.switchInnerTab = function(panelId, btn) {
+            document.querySelectorAll('.inner-tab-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.inner-tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(panelId).classList.add('active');
+            btn.classList.add('active');
+        };
     </script>
 </body>
 </html>
