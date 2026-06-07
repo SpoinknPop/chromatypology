@@ -624,9 +624,9 @@
 }
 
 .top-actions {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     margin-bottom: 24px;
     flex-shrink: 0;
 }
