@@ -11,21 +11,27 @@
     <!-- ── TOP-LEVEL TABS ── -->
     <div class="top-shell">
         <nav class="main-nav" aria-label="Primary navigation">
-            <button class="main-tab-btn active" onclick="switchMainTab('quiz-tab', this)">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg>
-                <span>Quiz</span>
-            </button>
-            <button class="main-tab-btn" onclick="switchMainTab('chroma-tab', this)">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10.5 9-7 9 7"/><path d="M5 9.5V20h14V9.5"/><path d="M9 20v-6h6v6"/></svg>
+            <button class="main-tab-btn active" onclick="switchMainTab('chroma-tab', this)">
                 <span>Home</span>
             </button>
+            <button class="main-tab-btn" onclick="switchMainTab('quiz-tab', this)">
+                <span>Quiz</span>
+            </button>
         </nav>
+        <div class="top-actions" aria-label="Page actions">
+            <button class="icon-action" id="theme-toggle" type="button" onclick="toggleDarkMode()" aria-label="Switch to dark mode" title="Dark mode">
+                <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3 6.5 6.5 0 0 0 21 12.8Z"/></svg>
+            </button>
+            <a class="icon-action discord-action" href="https://discord.gg/5QAyBHYbEM" target="_blank" rel="noopener noreferrer" aria-label="Join Discord" title="Discord">
+                <svg class="discord-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.32 4.37A19.8 19.8 0 0 0 15.36 2.8a13.8 13.8 0 0 0-.64 1.32 18.4 18.4 0 0 0-5.44 0 13.8 13.8 0 0 0-.64-1.32c-1.73.3-3.4.83-4.96 1.57C.54 9.1-.32 13.72.1 18.28a19.9 19.9 0 0 0 6.08 3.06c.49-.66.93-1.36 1.3-2.1-.72-.27-1.4-.6-2.04-.98.17-.12.33-.25.49-.38a14.16 14.16 0 0 0 12.14 0c.16.13.32.26.49.38-.64.38-1.32.71-2.04.98.37.74.81 1.44 1.3 2.1a19.9 19.9 0 0 0 6.08-3.06c.5-5.29-.84-9.87-3.58-13.91ZM8.02 15.47c-1.18 0-2.15-1.08-2.15-2.4 0-1.33.95-2.41 2.15-2.41s2.18 1.09 2.15 2.41c0 1.32-.95 2.4-2.15 2.4Zm7.96 0c-1.18 0-2.15-1.08-2.15-2.4 0-1.33.95-2.41 2.15-2.41s2.18 1.09 2.15 2.41c0 1.32-.95 2.4-2.15 2.4Z"/></svg>
+            </a>
+        </div>
     </div>
 
     <div style="width:100%;max-width:1100px;margin:0 auto;padding:0 20px 40px;">
 
         <!-- ══════════ QUIZ TAB ══════════ -->
-        <div id="quiz-tab" class="main-tab-content active">
+        <div id="quiz-tab" class="main-tab-content">
             <div class="container" style="margin:0;padding:0;">
                 <!-- Pagination Form -->
                 <div class="glass-panel">
@@ -51,14 +57,6 @@
                 <div class="glass-panel sidebar">
                     <div class="sidebar-header">
                         <h2 class="results-title">Your Profile Dynamics</h2>
-                        <div class="sidebar-actions" aria-label="Sidebar actions">
-                            <button class="icon-action" type="button" onclick="toggleDarkMode()" aria-label="Toggle dark mode" title="Dark mode">
-                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3 6.5 6.5 0 0 0 21 12.8Z"/></svg>
-                            </button>
-                            <a class="icon-action discord-action" href="https://discord.gg/5QAyBHYbEM" target="_blank" rel="noopener noreferrer" aria-label="Join Discord" title="Discord">
-                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 8.8c2.3-.7 4.7-.7 7 0"/><path d="M8 16.3c2.6 1 5.4 1 8 0"/><path d="M9.3 13.1h.01M14.7 13.1h.01"/><path d="M7.2 5.7c3.1-1.2 6.5-1.2 9.6 0 2.1 3.1 2.8 6.6 2.2 10.4-2.3 1.7-4.5 2.7-6.6 3l-.8-1.5c-.4 0-.8 0-1.2 0l-.8 1.5c-2.1-.3-4.3-1.3-6.6-3-.6-3.8.1-7.3 2.2-10.4l2.1.9Z"/></svg>
-                            </a>
-                        </div>
                     </div>
                     <div class="results-container">
                         <div class="blur-overlay" id="blur-gate">
@@ -90,7 +88,7 @@
         </div>
 
         <!-- ══════════ CHROMATYPOLOGY TAB ══════════ -->
-        <div id="chroma-tab" class="main-tab-content">
+        <div id="chroma-tab" class="main-tab-content active">
             <div class="glass-panel chroma-page">
 
                 <!-- Inner tab bar -->
@@ -597,8 +595,22 @@
         }
 
 
+        const moonIcon = '<svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3 6.5 6.5 0 0 0 21 12.8Z"/></svg>';
+        const sunIcon = '<svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>';
+
+        function updateThemeToggleIcon() {
+            const toggle = document.getElementById('theme-toggle');
+            if (!toggle) return;
+
+            const isDark = document.body.classList.contains('dark-mode');
+            toggle.innerHTML = isDark ? sunIcon : moonIcon;
+            toggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+            toggle.setAttribute('title', isDark ? 'Light mode' : 'Dark mode');
+        }
+
         window.toggleDarkMode = function() {
             document.body.classList.toggle('dark-mode');
+            updateThemeToggleIcon();
         };
         // Initialize App Setup
         initFirebase();
