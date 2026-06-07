@@ -580,3 +580,203 @@
         .example-color.cornflower {
             color: #3b82f6;
         }
+
+/* Header nav as clickable words */
+.top-shell {
+    width: 100%;
+    max-width: 1100px;
+    margin: 40px auto 0;
+    padding: 0 20px;
+}
+
+.main-nav {
+    align-items: center;
+    gap: 22px;
+    margin: 0 auto 24px;
+}
+
+.main-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    color: var(--text-secondary);
+}
+
+.main-tab-btn svg,
+.icon-action svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.main-tab-btn.active,
+.main-tab-btn:hover:not(.active) {
+    background: transparent;
+    box-shadow: none;
+    color: var(--text-primary);
+}
+
+.main-tab-btn.active span {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 7px;
+}
+
+/* Sidebar actions */
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    padding-bottom: 12px;
+}
+
+.sidebar-header .results-title {
+    margin: 0;
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.sidebar-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.icon-action {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(203, 213, 225, 0.9);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.65);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.icon-action:hover {
+    color: var(--text-primary);
+    border-color: rgba(79, 70, 229, 0.35);
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateY(-1px);
+}
+
+.discord-action:hover {
+    color: #5865f2;
+}
+
+/* Motivations as a list */
+.motives-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+    max-width: 680px;
+}
+
+.motive-item {
+    display: grid;
+    grid-template-columns: minmax(120px, 170px) 1fr;
+    gap: 18px;
+    align-items: baseline;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.75);
+}
+
+.motive-item .motive-name {
+    font-size: 1rem;
+    font-weight: 850;
+    margin-bottom: 0;
+}
+
+.motive-control .motive-name { color: #dc2626; }
+.motive-perfection .motive-name { color: #e11d48; }
+.motive-fame .motive-name { color: #f97316; }
+.motive-peace .motive-name { color: #d97706; }
+.motive-freedom .motive-name { color: #65a30d; }
+.motive-success .motive-name { color: #16a34a; }
+.motive-knowledge .motive-name { color: #0891b2; }
+.motive-service .motive-name { color: #0ea5e9; }
+.motive-expression .motive-name { color: #3b82f6; }
+.motive-stability .motive-name { color: #7c3aed; }
+.motive-connection .motive-name { color: #a855f7; }
+.motive-eroticism .motive-name { color: #db2777; }
+
+@media (max-width: 560px) {
+    .motive-item {
+        grid-template-columns: 1fr;
+        gap: 3px;
+    }
+}
+
+/* Dark mode */
+body.dark-mode {
+    --bg-color: #0b1120;
+    --text-primary: #e5edf8;
+    --text-secondary: #9fb0c7;
+    --glass-bg: rgba(15, 23, 42, 0.78);
+    --glass-border: rgba(71, 85, 105, 0.62);
+    --shadow: 0 18px 50px -20px rgba(0, 0, 0, 0.7), 0 1px 3px rgba(0, 0, 0, 0.35);
+    background-image:
+        radial-gradient(at 0% 0%, rgba(239, 68, 68, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.12) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%);
+}
+
+body.dark-mode .question-card,
+body.dark-mode .motive-card,
+body.dark-mode .icon-action,
+body.dark-mode .nav-btn {
+    background: rgba(15, 23, 42, 0.7);
+    border-color: rgba(71, 85, 105, 0.7);
+}
+
+body.dark-mode .circle-btn {
+    background: #111827;
+    border-color: #475569;
+}
+
+body.dark-mode .bar-bg,
+body.dark-mode .status-badge,
+body.dark-mode .archetype-table th {
+    background: rgba(30, 41, 59, 0.9);
+}
+
+body.dark-mode .blur-overlay {
+    background: rgba(15, 23, 42, 0.35);
+}
+
+body.dark-mode .archetype-table td,
+body.dark-mode .motive-item,
+body.dark-mode .sidebar-header,
+body.dark-mode .pagination-controls,
+body.dark-mode .inner-tabs {
+    border-color: rgba(71, 85, 105, 0.7);
+}
+
+body.dark-mode .archetype-table tr:hover td {
+    background: rgba(30, 41, 59, 0.55);
+}
+
+body.dark-mode .quiz-header h1,
+body.dark-mode .chroma-intro h2 {
+    background: linear-gradient(135deg, #f8fafc 0%, #60a5fa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
