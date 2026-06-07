@@ -587,12 +587,18 @@
     max-width: 1100px;
     margin: 40px auto 0;
     padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
 }
 
 .main-nav {
+    width: auto;
+    max-width: none;
     align-items: center;
     gap: 22px;
-    margin: 0 auto 24px;
+    margin: 0 0 24px;
 }
 
 .main-tab-btn {
@@ -607,7 +613,6 @@
     color: var(--text-secondary);
 }
 
-.main-tab-btn svg,
 .icon-action svg {
     width: 18px;
     height: 18px;
@@ -616,6 +621,25 @@
     stroke-width: 2;
     stroke-linecap: round;
     stroke-linejoin: round;
+}
+
+.top-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-shrink: 0;
+}
+
+.discord-icon {
+    fill: currentColor !important;
+    stroke: none !important;
+}
+
+.moon-icon,
+.sun-icon {
+    fill: none;
+    stroke: currentColor;
 }
 
 .main-tab-btn.active,
@@ -719,6 +743,10 @@
 .motive-eroticism .motive-name { color: #db2777; }
 
 @media (max-width: 560px) {
+    .top-shell {
+        align-items: flex-start;
+    }
+
     .motive-item {
         grid-template-columns: 1fr;
         gap: 3px;
