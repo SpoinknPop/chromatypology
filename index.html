@@ -9,10 +9,16 @@
 <body>
 
     <!-- ── TOP-LEVEL TABS ── -->
-    <div style="width:100%;max-width:1100px;margin:40px auto 0;padding:0 20px;">
-        <nav class="main-nav">
-            <button class="main-tab-btn active" onclick="switchMainTab('quiz-tab', this)">Spectrum Inventory</button>
-            <button class="main-tab-btn" onclick="switchMainTab('chroma-tab', this)">Chromatypology</button>
+    <div class="top-shell">
+        <nav class="main-nav" aria-label="Primary navigation">
+            <button class="main-tab-btn active" onclick="switchMainTab('quiz-tab', this)">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg>
+                <span>Quiz</span>
+            </button>
+            <button class="main-tab-btn" onclick="switchMainTab('chroma-tab', this)">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10.5 9-7 9 7"/><path d="M5 9.5V20h14V9.5"/><path d="M9 20v-6h6v6"/></svg>
+                <span>Home</span>
+            </button>
         </nav>
     </div>
 
@@ -43,7 +49,17 @@
 
                 <!-- Metric Dashboard Panel -->
                 <div class="glass-panel sidebar">
-                    <h2 class="results-title">Your Profile Dynamics</h2>
+                    <div class="sidebar-header">
+                        <h2 class="results-title">Your Profile Dynamics</h2>
+                        <div class="sidebar-actions" aria-label="Sidebar actions">
+                            <button class="icon-action" type="button" onclick="toggleDarkMode()" aria-label="Toggle dark mode" title="Dark mode">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3 6.5 6.5 0 0 0 21 12.8Z"/></svg>
+                            </button>
+                            <a class="icon-action discord-action" href="https://discord.gg/5QAyBHYbEM" target="_blank" rel="noopener noreferrer" aria-label="Join Discord" title="Discord">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 8.8c2.3-.7 4.7-.7 7 0"/><path d="M8 16.3c2.6 1 5.4 1 8 0"/><path d="M9.3 13.1h.01M14.7 13.1h.01"/><path d="M7.2 5.7c3.1-1.2 6.5-1.2 9.6 0 2.1 3.1 2.8 6.6 2.2 10.4-2.3 1.7-4.5 2.7-6.6 3l-.8-1.5c-.4 0-.8 0-1.2 0l-.8 1.5c-2.1-.3-4.3-1.3-6.6-3-.6-3.8.1-7.3 2.2-10.4l2.1.9Z"/></svg>
+                            </a>
+                        </div>
+                    </div>
                     <div class="results-container">
                         <div class="blur-overlay" id="blur-gate">
                             <p class="gate-msg" id="gate-msg">Complete 36 statements<br>to view live calculations.</p>
@@ -133,21 +149,20 @@
                         <h2>The 12 Motivations</h2>
                         <p>Motivations are the intrinsic and extrinsic "why" behind our actions and behaviors. Every archetype in Chromatypology is grounded in one of these 12 foundational drives.</p>
                     </div>
-                    <div class="motives-grid">
-                        <div class="motive-card"><div class="motive-name">🥊 Control</div><div class="motive-desc">Independence · Power · Authority</div></div>
-                        <div class="motive-card"><div class="motive-name">⚖️ Perfection</div><div class="motive-desc">Law · Standards · Morality</div></div>
-                        <div class="motive-card"><div class="motive-name">📣 Fame</div><div class="motive-desc">Reputation · Popularity · Integration</div></div>
-                        <div class="motive-card"><div class="motive-name">☀️ Peace</div><div class="motive-desc">Serenity · Satisfaction · Diplomacy</div></div>
-                        <div class="motive-card"><div class="motive-name">🗽 Freedom</div><div class="motive-desc">Possibility · Liberty · Thrill</div></div>
-                        <div class="motive-card"><div class="motive-name">✅ Success</div><div class="motive-desc">Achievements · Victory · Work</div></div>
-                        <div class="motive-card"><div class="motive-name">🌐 Knowledge</div><div class="motive-desc">Facts · Understanding · Curiosity</div></div>
-                        <div class="motive-card"><div class="motive-name">🛡️ Service</div><div class="motive-desc">Empathy · Support · Positivity</div></div>
-                        <div class="motive-card"><div class="motive-name">🌊 Expression</div><div class="motive-desc">Passion · Expression · Creation</div></div>
-                        <div class="motive-card"><div class="motive-name">☂️ Stability</div><div class="motive-desc">Security · Preparation · Reliability</div></div>
-                        <div class="motive-card"><div class="motive-name">🔮 Connection</div><div class="motive-desc">People · Authenticity · Trust</div></div>
-                        <div class="motive-card"><div class="motive-name">💗 Eroticism</div><div class="motive-desc">Optimism · Romance · Idealism</div></div>
-                    </div>
-                </div>
+                    <ul class="motives-list">
+                        <li class="motive-item motive-control"><span class="motive-name">Control</span><span class="motive-desc">Independence · Power · Authority</span></li>
+                        <li class="motive-item motive-perfection"><span class="motive-name">Perfection</span><span class="motive-desc">Law · Standards · Morality</span></li>
+                        <li class="motive-item motive-fame"><span class="motive-name">Fame</span><span class="motive-desc">Reputation · Popularity · Integration</span></li>
+                        <li class="motive-item motive-peace"><span class="motive-name">Peace</span><span class="motive-desc">Serenity · Satisfaction · Diplomacy</span></li>
+                        <li class="motive-item motive-freedom"><span class="motive-name">Freedom</span><span class="motive-desc">Possibility · Liberty · Thrill</span></li>
+                        <li class="motive-item motive-success"><span class="motive-name">Success</span><span class="motive-desc">Achievements · Victory · Work</span></li>
+                        <li class="motive-item motive-knowledge"><span class="motive-name">Knowledge</span><span class="motive-desc">Facts · Understanding · Curiosity</span></li>
+                        <li class="motive-item motive-service"><span class="motive-name">Service</span><span class="motive-desc">Empathy · Support · Positivity</span></li>
+                        <li class="motive-item motive-expression"><span class="motive-name">Expression</span><span class="motive-desc">Passion · Expression · Creation</span></li>
+                        <li class="motive-item motive-stability"><span class="motive-name">Stability</span><span class="motive-desc">Security · Preparation · Reliability</span></li>
+                        <li class="motive-item motive-connection"><span class="motive-name">Connection</span><span class="motive-desc">People · Authenticity · Trust</span></li>
+                        <li class="motive-item motive-eroticism"><span class="motive-name">Eroticism</span><span class="motive-desc">Optimism · Romance · Idealism</span></li>
+                    </ul>                </div>
 
                 <!-- ── ALL ARCHETYPES ── -->
                 <div id="archetypes-panel" class="inner-tab-panel">
@@ -581,6 +596,10 @@
             bar.style.width = `${targetPercentage}%`;
         }
 
+
+        window.toggleDarkMode = function() {
+            document.body.classList.toggle('dark-mode');
+        };
         // Initialize App Setup
         initFirebase();
 
@@ -601,3 +620,4 @@
     </script>
 </body>
 </html>
+
